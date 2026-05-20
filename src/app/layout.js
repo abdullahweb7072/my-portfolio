@@ -2,7 +2,7 @@ import Footer from "@/Components/Footer";
 import "./globals.css";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
-import Loader from "@/Components/Loader";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
