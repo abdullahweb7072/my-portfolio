@@ -1,73 +1,108 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-@import "tailwindcss";
-
+/* ===============================
+   1. DESIGN TOKENS (SYSTEM CORE)
+================================ */
 @theme {
-  --color-bg: white;
-  --color-text: #111827;
-}
+  /* 🎨 Colors */
+  --color-primary: #2563eb;
+  --color-primary-dark: #3b82f6;
 
-.dark {
-  --color-bg: #0b0f19;
-  --color-text: #f3f4f6;
-}
+  --color-muted: #6b7280;
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-@theme {
+  /* 🧠 Typography */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-space), sans-serif;
+  --font-mono: var(--font-mono), monospace;
+
+  /* 🌫️ Shadows */
+  --solid-shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --solid-shadow-glow: 0 0 25px rgba(37, 99, 235, 0.4);
+
+  /* ⚡ Animations */
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-fadeInUp: fadeInUp 0.6s ease-out forwards;
   --animate-scroll: scroll 15s linear infinite;
 
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
   @keyframes scroll {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
   }
 }
-@keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+
+/* ===============================
+   2. GLOBAL THEME TOKENS
+================================ */
+:root {
+  /* 🌞 Light Mode */
+  --background: #fff8e7;
+  --foreground: #111827;
+
+  --primary: #2563eb;
+  --muted: #6b7280;
 }
 
+/* 🌙 Dark Mode (CLEAN - NO RED EVER) */
+.dark {
+  --background: #0b0f19;
+  --foreground: #ffffff;
+
+  --primary: #3b82f6;
+  --muted: #9ca3af;
+}
+
+/* fallback system theme */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: #0b0f19;
+    --foreground: #ffffff;
+
+    --primary: #3b82f6;
+    --muted: #9ca3af;
+  }
+}
+
+/* ===============================
+   3. BASE STYLES
+================================ */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* IMPORTANT SAFETY FIX (prevents overrides) */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===============================
+   4. UTILITY ANIMATIONS
+================================ */
 .animate-scaleIn {
   animation: scaleIn 0.3s ease-out;
 }
-@media print {
-  nav,
-  header,
-  footer {
-    display: none !important;
-  }
 
-  body {
-    margin: 0;
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
   }
-
-  #cv-content {
-    margin: 0 !important;
-    padding: 0 !important;
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }

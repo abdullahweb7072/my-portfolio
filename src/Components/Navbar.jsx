@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,136 +18,304 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/70 border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-
-        {/* Logo */}
+    <nav
+      className="
+        fixed
+        top-0
+        left-0
+        w-full
+        z-50
+        backdrop-blur-2xl
+        bg-white/70
+        dark:bg-black/40
+        border-b
+        border-black/5
+        dark:border-white/10
+        transition-all
+        duration-500
+      "
+    >
+      <div
+        className="
+          max-w-7xl
+          mx-auto
+          px-6
+          h-20
+          flex
+          items-center
+          justify-between
+        "
+      >
+        {/* LOGO */}
         <Link
           href="/"
-          className="text-2xl font-bold tracking-tight transition-transform hover:scale-105"
+          className="
+            text-2xl
+            font-black
+            tracking-tight
+            text-black
+            dark:text-white
+            transition-all
+            duration-300
+            hover:scale-105
+          "
         >
-          Abdullah<span className="text-blue-600">.</span>
+          Abdullah
+          <span className="text-blue-600 dark:text-blue-400">.</span>
         </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* DESKTOP NAV */}
+        <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => {
-  const isActive =
-  pathname?.replace(/\/$/, "") ===
-  link.href.replace(/\/$/, "");
+            const isActive =
+              pathname?.replace(/\/$/, "") ===
+              link.href.replace(/\/$/, "");
 
             return (
               <Link
                 key={link.name}
                 href={link.href}
-                className="relative text-gray-700 font-medium transition-all duration-300 hover:text-blue-600"
+                className="
+                  relative
+                  text-[15px]
+                  font-medium
+                  text-black/70
+                  dark:text-white/70
+                  hover:text-blue-600
+                  dark:hover:text-white
+                  transition-all
+                  duration-300
+                  group
+                "
               >
-                {link.name}
+                <span className="relative">
+                  {link.name}
 
-                {/* Active underline (animated) */}
-                <span
-                  className={`absolute left-0 -bottom-1 h-[2px] bg-blue-600 transition-all duration-300 ${
-                    isActive ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
-                />
-
-                {/* Active glow dot */}
-                {isActive && (
-                  <motion.span
-                    layoutId="activeIndicator"
-                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-blue-600"
+                  {/* UNDERLINE */}
+                  <span
+                    className={`
+                      absolute
+                      left-0
+                      -bottom-1
+                      h-[2px]
+                      bg-blue-600
+                      dark:bg-white
+                      transition-all
+                      duration-300
+                      ${
+                        isActive
+                          ? "w-full"
+                          : "w-0 group-hover:w-full"
+                      }
+                    `}
                   />
-                )}
+
+                  {/* ACTIVE DOT */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="navbar-dot"
+                      className="
+                        absolute
+                        left-1/2
+                        -translate-x-1/2
+                        -bottom-3
+                        w-1.5
+                        h-1.5
+                        rounded-full
+                        bg-blue-600
+                        dark:bg-white
+                      "
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </span>
               </Link>
             );
           })}
         </div>
 
-        {/* Mobile Button */}
-      {/* Mobile Button */}
-<button
-  className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/60 backdrop-blur-md border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 group"
-  onClick={() => setIsOpen(!isOpen)}
->
-  {/* wrapper for lines */}
-  <div className="relative w-5 h-4 flex flex-col justify-between items-center">
-    
-    {/* Top line */}
-    <span
-      className={`block h-0.5 w-5 bg-gray-800 rounded-full transition-all duration-300 origin-center ${
-        isOpen ? "rotate-45 translate-y-1.5" : ""
-      }`}
-    />
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-4">
+          
+          {/* THEME TOGGLE */}
+          <div className="hidden md:flex items-center justify-center">
+            <ThemeToggle />
+          </div>
 
-    {/* Middle line */}
-    <span
-      className={`block h-0.5 w-5 bg-gray-800 rounded-full transition-all duration-300 ${
-        isOpen ? "opacity-0 scale-0" : "opacity-100 scale-100"
-      }`}
-    />
+          {/* MOBILE MENU BUTTON */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="
+              md:hidden
+              relative
+              w-11
+              h-11
+              rounded-2xl
+              flex
+              items-center
+              justify-center
+              bg-white/70
+              dark:bg-white/5
+              border
+              border-black/10
+              dark:border-white/10
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:scale-105
+            "
+          >
+            <div className="relative w-5 h-4">
+              
+              {/* TOP */}
+              <span
+                className={`
+                  absolute
+                  top-0
+                  left-0
+                  w-full
+                  h-[2px]
+                  rounded-full
+                  bg-black
+                  dark:bg-white
+                  transition-all
+                  duration-300
+                  ${
+                    isOpen
+                      ? "rotate-45 top-[6px]"
+                      : ""
+                  }
+                `}
+              />
 
-    {/* Bottom line */}
-    <span
-      className={`block h-0.5 w-5 bg-gray-800 rounded-full transition-all duration-300 origin-center ${
-        isOpen ? "-rotate-45 -translate-y-1.5" : ""
-      }`}
-    />
+              {/* MIDDLE */}
+              <span
+                className={`
+                  absolute
+                  top-[6px]
+                  left-0
+                  w-full
+                  h-[2px]
+                  rounded-full
+                  bg-black
+                  dark:bg-white
+                  transition-all
+                  duration-300
+                  ${
+                    isOpen
+                      ? "opacity-0"
+                      : "opacity-100"
+                  }
+                `}
+              />
 
-  </div>
-
-  {/* Glow effect */}
-  <span className="absolute inset-0 rounded-xl bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300" />
-</button>
+              {/* BOTTOM */}
+              <span
+                className={`
+                  absolute
+                  bottom-0
+                  left-0
+                  w-full
+                  h-[2px]
+                  rounded-full
+                  bg-black
+                  dark:bg-white
+                  transition-all
+                  duration-300
+                  ${
+                    isOpen
+                      ? "-rotate-45 bottom-[6px]"
+                      : ""
+                  }
+                `}
+              />
+            </div>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 overflow-hidden"
+            initial={{
+              opacity: 0,
+              y: -20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -20,
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+            className="
+              md:hidden
+              border-t
+              border-black/5
+              dark:border-white/10
+              bg-white/80
+              dark:bg-black/70
+              backdrop-blur-2xl
+            "
           >
-            <div className="flex flex-col items-center gap-3 py-6 px-4">
+            <div className="px-6 py-6 flex flex-col gap-3">
 
-  {navLinks.map((link) => {
-    const isActive =
-      pathname === link.href ||
-      pathname.startsWith(link.href + "/");
+              {navLinks.map((link) => {
+                const isActive =
+                  pathname?.replace(/\/$/, "") ===
+                  link.href.replace(/\/$/, "");
 
-    return (
-      <Link
-        key={link.name}
-        href={link.href}
-        onClick={() => setIsOpen(false)}
-        className="relative w-full text-center py-3 rounded-xl text-lg font-medium transition-all duration-300 group overflow-hidden"
-      >
-        {/* Active background */}
-        {isActive && (
-          <motion.div
-            layoutId="mobile-active"
-            className="absolute inset-0 bg-blue-600 rounded-xl"
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
-          />
-        )}
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="relative"
+                  >
+                    <motion.div
+                      whileTap={{ scale: 0.97 }}
+                      className={`
+                        relative
+                        overflow-hidden
+                        rounded-2xl
+                        px-5
+                        py-4
+                        font-medium
+                        transition-all
+                        duration-300
+                        ${
+                          isActive
+                            ? "bg-blue-600 text-white"
+                            : "text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                        }
+                      `}
+                    >
+                      {link.name}
+                    </motion.div>
+                  </Link>
+                );
+              })}
 
-        {/* Hover background glow */}
-        <span className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300 rounded-xl" />
-
-        {/* Text */}
-        <span
-          className={`relative z-10 transition-all duration-300 ${
-            isActive ? "text-white" : "text-gray-700 group-hover:text-blue-600"
-          }`}
-        >
-          {link.name}
-        </span>
-      </Link>
-    );
-  })}
-</div>
+              {/* MOBILE THEME BUTTON */}
+              <div
+                className="
+                  flex
+                  justify-center
+                  pt-4
+                "
+              >
+                <ThemeToggle />
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -7,18 +7,25 @@ export default function ClientWrapper({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1200);
+    // Match this with loader total animation time
+    const t = setTimeout(() => setLoading(false), 4300);
+
     return () => clearTimeout(t);
   }, []);
 
   return (
     <>
-      {/* Your portfolio ALWAYS stays mounted */}
-      <div style={{ opacity: loading ? 0 : 1 }}>
+      {/* Portfolio stays mounted */}
+      <div
+        style={{
+          opacity: loading ? 0 : 1,
+          transition: "opacity 0.6s ease",
+        }}
+      >
         {children}
       </div>
 
-      {/* Loader as overlay */}
+      {/* Loader overlay */}
       {loading && <Loader />}
     </>
   );
