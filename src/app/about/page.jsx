@@ -270,7 +270,7 @@ export default function AboutPage() {
                 <h3 className="font-heading text-4xl font-bold text-blue-600 dark:text-white">
                   {item.number}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mt-2 transition-colors duration-500">{item.label}</p>
+                <p className="text-[var(--foreground)] mt-2 transition-colors duration-500">{item.label}</p>
               </motion.div>
             ))}
           </motion.div>

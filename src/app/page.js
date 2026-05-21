@@ -316,7 +316,7 @@ useEffect(() => {
             className="max-w-6xl mx-auto px-6 text-center mb-20"
           >
             <h2 className="text-5xl font-bold text-[var(--foreground)] transition-colors duration-500">My Projects</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-4 text-lg">
+            <p className="text-[var(--foreground)] mt-4 text-lg">
               Selected work showcasing modern UI, animation & performance
             </p>
           </motion.div>
@@ -462,7 +462,7 @@ useEffect(() => {
               { name: "CSS", icon: <FaCss3Alt className="text-blue-500 text-5xl mx-auto" /> },
               { name: "JavaScript", icon: <FaJs className="text-yellow-400 text-5xl mx-auto" /> },
               { name: "React", icon: <FaReact className="text-cyan-400 text-5xl mx-auto" /> },
-              { name: "Next.js", icon: <SiNextdotjs className="text-black dark:text-white text-5xl mx-auto" /> },
+              { name: "Next.js", icon: <SiNextdotjs className="text-[var(--foreground)] text-5xl mx-auto" /> },
               { name: "PostgreSQL", icon: <SiPostgresql className="text-indigo-600 dark:text-white text-5xl mx-auto" /> },
             ].map((skill, i) => (
               <div
@@ -506,7 +506,7 @@ useEffect(() => {
             ].map((item, i) => (
               <div key={i}>
                 <h3 className="text-xl font-semibold text-[var(--foreground)] transition-colors duration-500">{item.title}</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-1">{item.desc}</p>
+                <p className="text-[var(--foreground)] mt-1">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -529,22 +529,48 @@ useEffect(() => {
           </p>
 
           <div className="flex justify-center gap-6">
-            <Link
-              href="/contact"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              Email Me
-            </Link>
+  {/* EMAIL BUTTON (Upgraded) */}
+  <Link
+    href="/contact"
+    className="relative inline-flex items-center justify-center px-7 py-3 font-semibold text-white rounded-lg overflow-hidden group transition-transform duration-300 hover:-translate-y-1"
+  >
+    {/* base gradient */}
+    <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-lg transition-all duration-300 group-hover:scale-110"></span>
 
-            {/* CHANGED: border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 -> dark:text-white dark:border-white */}
-            <Link
-              href="https://www.instagram.com/0_abdullah.1?igsh=MTh1dTZ5cjAxcGZoNQ%3D%3D&utm_source=qr"
-              target="_blank"
-              className="px-6 py-3 border border-blue-600 text-blue-600 dark:text-white dark:border-white rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 transition"
-            >
-              Instagram
-            </Link>
-          </div>
+    {/* glow layer */}
+    <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-blue-400/40"></span>
+
+    {/* sweep light */}
+    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20"></span>
+
+    {/* border glow */}
+    <span className="absolute inset-0 rounded-lg border border-white/20 group-hover:border-white/40 transition"></span>
+
+    <span className="relative z-10 group-hover:tracking-wide transition-all duration-300">
+      Email Me →
+    </span>
+  </Link>
+
+  {/* INSTAGRAM BUTTON (Upgraded) */}
+  <Link
+    href="https://www.instagram.com/0_abdullah.1?igsh=MTh1dTZ5cjAxcGZoNQ%3D%3D&utm_source=qr"
+    target="_blank"
+    className="relative inline-flex items-center justify-center px-7 py-3 font-semibold rounded-lg overflow-hidden group border border-blue-600 text-blue-600 dark:text-white dark:border-white transition-transform duration-300 hover:-translate-y-1"
+  >
+    {/* hover fill */}
+    <span className="absolute inset-0 bg-blue-600 dark:bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></span>
+
+    {/* glow */}
+    <span className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-blue-400 dark:bg-white blur-xl transition duration-300"></span>
+
+    {/* sweep */}
+    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20"></span>
+
+    <span className="relative z-10 group-hover:text-white dark:group-hover:text-black transition-colors duration-300 group-hover:tracking-wide">
+      Instagram →
+    </span>
+  </Link>
+</div>
         </motion.section>
 
         {/* ================== INFINITE SKILLS MARQUEE ================== */}
@@ -565,7 +591,7 @@ useEffect(() => {
                   {Icon === FaCss3Alt && <FaCss3Alt className="text-blue-500" />}
                   {Icon === FaJs && <FaJs className="text-yellow-400" />}
                   {Icon === FaReact && <FaReact className="text-cyan-400" />}
-                  {Icon === SiNextdotjs && <SiNextdotjs className="text-black dark:text-white" />}
+                  {Icon === SiNextdotjs && <SiNextdotjs className="text-[var(--foreground)]" />}
                   {Icon === SiPostgresql && <SiPostgresql className="text-indigo-600 dark:text-white" />}
                 </div>
               ))}
