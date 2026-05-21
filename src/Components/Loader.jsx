@@ -50,9 +50,7 @@ export default function Loader() {
       </div>
 
       {/* Animated Grid Background */}
-      <div
-        className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#3b82f622_1px,transparent_1px),linear-gradient(to_bottom,#3b82f622_1px,transparent_1px)] bg-[size:70px_70px]"
-      />
+      <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#3b82f622_1px,transparent_1px),linear-gradient(to_bottom,#3b82f622_1px,transparent_1px)] bg-[size:70px_70px]" />
 
       {/* Top Glow */}
       <motion.div
@@ -144,7 +142,7 @@ export default function Loader() {
           className="mt-6 h-[2px] w-[280px] rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 origin-center shadow-[0_0_30px_rgba(59,130,246,0.6)]"
         />
 
-        {/* Subtitle */}
+        {/* Subtitle (FIXED ALIGNMENT ONLY) */}
         <motion.p
           initial={{
             opacity: 0,
@@ -158,7 +156,7 @@ export default function Loader() {
             delay: 2,
             duration: 0.8,
           }}
-          className="mt-5 text-sm md:text-base tracking-[0.3em] uppercase text-gray-500 dark:text-white/50"
+          className="mt-5 text-sm md:text-base tracking-[0.3em] uppercase text-gray-500 dark:text-white/50 text-center px-2"
         >
           Frontend Developer • Next.js • UI Engineer
         </motion.p>
