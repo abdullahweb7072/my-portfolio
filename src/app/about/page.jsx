@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 import ThemeToggle from "@/Components/ThemeToggle";
+import CountUp from "react-countup";
 
 export default function AboutPage() {
   return (
@@ -247,33 +248,111 @@ export default function AboutPage() {
           </div>
 
           {/* STATS / HIGHLIGHTS - Adapted cards for dark backgrounds */}
-          <motion.div
-            initial={{ opacity: 0, y: 80 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="grid md:grid-cols-3 gap-10 mt-24"
-          >
-            {[
-              { number: "10+", label: "Projects Built" },
-              { number: "1+", label: "Years Learning" },
-              { number: "100%", label: "Passion for UI/UX" },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -10, scale: 1.06 }}
-                transition={{
-                  duration: 0.15,
-                  ease: "easeOut"
-                }}
-                className="bg-[var(--background)] dark:bg-gray-900 p-10 rounded-2xl shadow-soft text-center hover:shadow-glow border border-gray-100 dark:border-gray-800/60 transition-all duration-300"
-              >
-                <h3 className="font-heading text-4xl font-bold text-blue-600 dark:text-white">
-                  {item.number}
-                </h3>
-                <p className="text-[var(--foreground)] mt-2 transition-colors duration-500">{item.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* STATS / HIGHLIGHTS - Adapted cards for dark backgrounds */}
+<motion.div
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+  className="grid md:grid-cols-3 gap-10 mt-24"
+>
+  {[
+    { number: 10, suffix: "+", label: "Projects Built" },
+    { number: 1, suffix: "+", label: "Years Learning" },
+    { number: 100, suffix: "%", label: "Passion for UI/UX" },
+  ].map((item, i) => (
+    <motion.div
+      key={i}
+      whileHover={{ y: -10, scale: 1.06 }}
+      transition={{
+        duration: 0.15,
+        ease: "easeOut"
+      }}
+      className="
+        bg-[var(--background)]
+        dark:bg-gray-900
+        p-10
+        rounded-2xl
+        shadow-soft
+        text-center
+        hover:shadow-glow
+        border
+        border-gray-100
+        dark:border-gray-800/60
+        transition-all
+        duration-300
+        relative
+        overflow-hidden
+        group
+      "
+    >
+
+      {/* Animated Glow */}
+      <div className="
+        absolute
+        inset-0
+        opacity-0
+        group-hover:opacity-100
+        transition-opacity
+        duration-500
+        bg-gradient-to-r
+        from-blue-500/10
+        via-purple-500/10
+        to-indigo-500/10
+      " />
+
+      {/* Number */}
+      <motion.h3
+        initial={{ scale: 0.5, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{
+          type: "spring",
+          stiffness: 180,
+          damping: 10,
+          delay: i * 0.15,
+        }}
+        className="
+          relative
+          z-10
+          font-heading
+          text-5xl
+          md:text-6xl
+          font-extrabold
+          bg-gradient-to-r
+          from-blue-500
+          via-indigo-500
+          to-purple-500
+          bg-clip-text
+          text-transparent
+          drop-shadow-[0_0_25px_rgba(59,130,246,0.45)]
+        "
+      >
+        <CountUp
+          end={item.number}
+          duration={2.5}
+          enableScrollSpy
+          scrollSpyOnce
+        />
+        {item.suffix}
+      </motion.h3>
+
+      {/* Label */}
+      <p className="
+        relative
+        z-10
+        text-[var(--foreground)]
+        mt-4
+        text-lg
+        font-medium
+        transition-colors
+        duration-500
+      ">
+        {item.label}
+      </p>
+
+    </motion.div>
+  ))}
+</motion.div>
 
         </div>
       </section>
