@@ -7,7 +7,10 @@ import { FaHtml5, FaCss3Alt, FaJs, FaReact } from "react-icons/fa";
 import { SiNextdotjs, SiPostgresql } from "react-icons/si";
 import ClientWrapper from "@/Components/ClientWrapper";
 import ThemeToggle from "@/Components/ThemeToggle";
-
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
@@ -16,7 +19,11 @@ export default function Home() {
   const cardRef = useRef(null);
   const svgRef = useRef(null);
   const heroRef = useRef(null);
-
+  const [expanded, setExpanded] = useState(false);
+const { ref, inView } = useInView({
+  triggerOnce: true,
+  threshold: 0.3,
+});
   
 useEffect(() => {
   const card = cardRef.current;
@@ -300,303 +307,1913 @@ useEffect(() => {
         </div>
 
         {/* ================== PROJECTS SECTION ================== */}
-        <motion.section
-          id="projects"
-          initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.9 }}
-          className="py-28 bg-transparent"
+        {/* ================== PROJECTS SECTION ================== */}
+<motion.section
+  id="projects"
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, amount: 0.2 }}
+  transition={{ duration: 1 }}
+  className="relative py-32 overflow-hidden"
+>
+  {/* BACKGROUND GLOWS */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-blue-500/10 blur-[140px] rounded-full pointer-events-none" />
+
+  <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+  {/* FLOATING PARTICLES */}
+  {[...Array(12)].map((_, i) => (
+    <motion.div
+      key={i}
+      animate={{
+        y: [0, -35, 0],
+        opacity: [0.2, 1, 0.2],
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: 4 + i,
+      }}
+      className="absolute w-2 h-2 rounded-full bg-white/10"
+      style={{
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+      }}
+    />
+  ))}
+
+  {/* HEADING */}
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8 }}
+    className="max-w-7xl mx-auto px-6 text-center mb-24 relative z-10"
+  >
+    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-5">
+      Featured Work
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+      My Projects
+    </h2>
+
+    <p className="text-lg text-[var(--foreground)]/70 mt-8 max-w-2xl mx-auto leading-relaxed">
+      A collection of immersive digital experiences built with modern UI,
+      cinematic animations and performance-first frontend architecture.
+    </p>
+  </motion.div>
+
+  {/* PROJECT GRID */}
+  <motion.div
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={{
+      hidden: {},
+      visible: {
+        transition: {
+          staggerChildren: 0.18,
+        },
+      },
+    }}
+    className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 relative z-10"
+  >
+    {projects.map((project, i) => (
+      <motion.div
+        key={i}
+        variants={{
+          hidden: {
+            opacity: 0,
+            y: 80,
+            scale: 0.92,
+          },
+
+          visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          },
+        }}
+        transition={{
+          duration: 0.9,
+          ease: "easeOut",
+        }}
+      >
+        <Link
+          href={project.live}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block group"
         >
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="max-w-6xl mx-auto px-6 text-center mb-20"
-          >
-            <h2 className="text-5xl font-bold text-[var(--foreground)] transition-colors duration-500">My Projects</h2>
-            <p className="text-[var(--foreground)] mt-4 text-lg">
-              Selected work showcasing modern UI, animation & performance
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.18 } },
+            whileHover={{
+              y: -18,
+              rotateX: 4,
+              rotateY: 2,
             }}
-            className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10"
+            transition={{
+              type: "spring",
+              stiffness: 120,
+              damping: 18,
+            }}
+            className="
+              relative
+              h-[460px]
+
+              rounded-[38px]
+              overflow-hidden
+
+              border border-white/10
+
+              backdrop-blur-3xl
+              bg-white/[0.03]
+
+              shadow-[0_25px_90px_rgba(0,0,0,0.35)]
+
+              preserve-3d
+            "
           >
-            {projects.map((project, i) => (
-              <motion.div
-                key={i}
-                variants={{
-                  hidden: { opacity: 0, y: 60, scale: 0.96 },
-                  visible: { opacity: 1, y: 0, scale: 1 },
-                }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-              >
-                <Link
-                  href={project.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <motion.div
-                    whileHover={{ y: -14 }}
-                    transition={{ type: "spring", stiffness: 120, damping: 18 }}
-                    className="relative rounded-3xl overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_70px_rgba(0,0,0,0.4)] cursor-pointer"
-                  >
-                    <div className="relative h-[320px] overflow-hidden">
-                      <motion.div
-                        whileHover={{ scale: 1.08 }}
-                        transition={{ duration: 0.7, ease: "easeOut" }}
-                        className="w-full h-full"
-                      >
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </motion.div>
-                    </div>
+            {/* HOVER GRADIENT */}
+            <div
+              className="
+                absolute
+                inset-0
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                bg-gradient-to-br
+                from-blue-500/10
+                via-transparent
+                to-purple-500/10
 
-                    <div className="absolute bottom-8 left-8 text-white">
-                      <h3 className="text-2xl font-semibold tracking-wide">
-                        {project.title}
-                      </h3>
-                      {/* CHANGED: text-blue-300 -> dark:text-white */}
-                      <p className="text-sm mt-2 opacity-90 text-blue-300 dark:text-white">
-                        View Live Project →
-                      </p>
-                    </div>
-                  </motion.div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.section>
+                opacity-0
+                group-hover:opacity-100
 
-        {/* ================== ABOUT ME SECTION ================== */}
-        <motion.section
-          id="about"
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mt-32 px-6"
-        >
-          <h2 className="text-4xl font-bold text-center text-[var(--foreground)] transition-colors duration-500 mb-12">
-            About Me
-          </h2>
+                transition-opacity
+                duration-700
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 text-[var(--foreground)] opacity-80 transition-colors duration-500 text-lg leading-relaxed">
-              <p>
-                I'm Abdullah Babar, a passionate Next.js developer focused on building
-                modern, animated and highly responsive web interfaces.
-              </p>
-              <p>
-                I love crafting smooth user experiences with clean UI, performance
-                optimization, and beautiful animations using React, Tailwind and
-                Framer Motion.
-              </p>
-              <p>
-                My goal is to create websites that not only work perfectly but also
-                feel premium and interactive.
-              </p>
-            </div>
+                z-10
+              "
+            />
 
-            {/* LEFT — CINEMATIC IMAGE */}
-<motion.div
-              initial={{ opacity: 0, x: -80 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-              className="flex justify-center"
+            {/* ANIMATED LIGHT */}
+            <motion.div
+              animate={{
+                x: [-250, 250],
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 4,
+                delay: i * 0.5,
+              }}
+              className="
+                absolute
+                top-0
+                left-0
+
+                w-28
+                h-full
+
+                bg-white/10
+                blur-3xl
+                rotate-12
+
+                z-20
+              "
+            />
+
+            {/* NUMBERING */}
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.5,
+              }}
+              whileInView={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                delay: i * 0.2,
+                duration: 0.6,
+              }}
+              className="
+                absolute
+                top-5
+                left-5
+                z-30
+
+                w-16
+                h-16
+
+                rounded-2xl
+
+                border border-white/10
+                bg-black/30
+                backdrop-blur-2xl
+
+                flex
+                items-center
+                justify-center
+
+                shadow-[0_10px_30px_rgba(0,0,0,0.35)]
+              "
             >
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 1 }}
-                transition={{ type: "spring", stiffness: 200 }}
-                className="relative rounded-3xl overflow-visible shadow-soft border-4 border-white dark:border-gray-800 transition-colors duration-500"
+              <span
+                className="
+                  text-2xl
+                  font-black
+
+                  bg-gradient-to-br
+                  from-blue-400
+                  to-purple-400
+
+                  bg-clip-text
+                  text-transparent
+                "
               >
-                {/* 🎀 Top Left Tape - Neutralized for Dark Mode integration */}
-                <div className="absolute -top-3 -left-3 w-10 h-4 bg-blue-300 dark:bg-zinc-700 rotate-[-25deg] shadow-md opacity-90 transition-colors duration-500" />
+                0{i + 1}
+              </span>
+            </motion.div>
 
-                {/* 🎀 Bottom Right Tape */}
-                <div className="absolute -bottom-3 -right-3 w-10 h-4 bg-blue-300 dark:bg-zinc-700 rotate-[-25deg] shadow-md opacity-90 transition-colors duration-500" />
-
+            {/* IMAGE */}
+            <div className="absolute inset-0 overflow-hidden">
+              <motion.div
+                whileHover={{
+                  scale: 1.12,
+                }}
+                transition={{
+                  duration: 1,
+                  ease: "easeOut",
+                }}
+                className="w-full h-full"
+              >
                 <Image
-                  src="/myimg.jpeg"
-                  alt="Abdullah Babar"
-                  width={250}
-                  height={300}
-                  className="object-cover rounded-2xl"
-                  priority
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="
+                    object-cover
+
+                    brightness-[0.65]
+
+                    group-hover:brightness-[0.9]
+
+                    transition-all
+                    duration-700
+                  "
                 />
               </motion.div>
-            </motion.div>
-          </div>
-        </motion.section>
+            </div>
 
-        {/* ================== SKILLS SECTION ================== */}
-        <motion.section
-          id="skills"
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mt-32 px-6"
-        >
-          <h2 className="text-4xl font-bold text-center text-[var(--foreground)] transition-colors duration-500 mb-14">
-            Skills
-          </h2>
+            {/* DARK OVERLAY */}
+            <div
+              className="
+                absolute
+                inset-0
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-8 text-center">
-            {[
-              { name: "HTML", icon: <FaHtml5 className="text-orange-500 text-5xl mx-auto" /> },
-              { name: "CSS", icon: <FaCss3Alt className="text-blue-500 text-5xl mx-auto" /> },
-              { name: "JavaScript", icon: <FaJs className="text-yellow-400 text-5xl mx-auto" /> },
-              { name: "React", icon: <FaReact className="text-cyan-400 text-5xl mx-auto" /> },
-              { name: "Next.js", icon: <SiNextdotjs className="text-[var(--foreground)] text-5xl mx-auto" /> },
-              { name: "PostgreSQL", icon: <SiPostgresql className="text-indigo-600 dark:text-white text-5xl mx-auto" /> },
-            ].map((skill, i) => (
+                bg-gradient-to-t
+                from-black
+                via-black/40
+                to-transparent
+
+                z-10
+              "
+            />
+
+            {/* PARTICLES */}
+            {[...Array(6)].map((_, idx) => (
+              <motion.div
+                key={idx}
+                animate={{
+                  y: [0, -20, 0],
+                  opacity: [0.2, 0.8, 0.2],
+                }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3 + idx,
+                }}
+                className="
+                  absolute
+                  w-2
+                  h-2
+                  rounded-full
+                  bg-white/20
+                  z-20
+                "
+                style={{
+                  top: `${20 + idx * 12}%`,
+                  left: `${10 + idx * 14}%`,
+                }}
+              />
+            ))}
+
+            {/* CONTENT */}
+            <div
+              className="
+                absolute
+                bottom-0
+                left-0
+
+                w-full
+                p-8
+
+                z-30
+              "
+            >
+              {/* TOP TAG */}
               <div
-                key={i}
-                className="p-8 bg-[var(--background)] dark:bg-gray-900 rounded-2xl shadow-md hover:shadow-xl border border-gray-100 dark:border-gray-800/60 hover:-translate-y-2 hover:scale-105 transition duration-300 space-y-4"
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+
+                  px-4
+                  py-2
+                  mb-5
+
+                  rounded-full
+
+                  border border-white/10
+                  bg-white/10
+
+                  backdrop-blur-xl
+
+                  text-xs
+                  tracking-[0.2em]
+                  uppercase
+                  text-white/80
+                "
+              >
+                Featured Project
+              </div>
+
+              {/* TITLE */}
+              <motion.h3
+                whileHover={{
+                  x: 6,
+                }}
+                className="
+                  text-3xl
+                  md:text-4xl
+                  font-black
+                  text-white
+                "
+              >
+                {project.title}
+              </motion.h3>
+
+              {/* DESCRIPTION */}
+              <p className="mt-4 text-white/70 leading-relaxed max-w-md">
+                Modern interactive web experience with premium animations,
+                immersive UI and performance-focused frontend development.
+              </p>
+
+              {/* BUTTON */}
+              <motion.div
+                whileHover={{
+                  x: 10,
+                }}
+                className="
+                  mt-7
+
+                  inline-flex
+                  items-center
+                  gap-3
+
+                  text-blue-300
+                  dark:text-white
+
+                  font-semibold
+                  tracking-wide
+                "
+              >
+                Explore Project
+                <span className="text-xl">→</span>
+              </motion.div>
+            </div>
+
+            {/* BORDER GLOW */}
+            <div
+              className="
+                absolute
+                inset-0
+                rounded-[38px]
+
+                opacity-0
+                group-hover:opacity-100
+
+                transition-opacity
+                duration-700
+
+                shadow-[0_0_70px_rgba(59,130,246,0.25)]
+              "
+            />
+          </motion.div>
+        </Link>
+      </motion.div>
+    ))}
+  </motion.div>
+</motion.section>
+
+        
+{/* ================== ABOUT SECTION ================== */}
+<motion.section
+  id="about"
+  initial={{ opacity: 0, y: 60 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="max-w-7xl mx-auto mt-40 px-6 relative overflow-hidden"
+>
+  {/* BACKGROUND GLOW */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] blur-[140px] rounded-full pointer-events-none" />
+
+  {/* HEADING */}
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-center mb-24 relative z-10"
+  >
+    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+      About Me
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+      Building
+      <span className="block">
+        immersive experiences
+      </span>
+    </h2>
+  </motion.div>
+
+  <div className="grid lg:grid-cols-2 gap-24 items-center relative z-10">
+
+    {/* ================= IMAGE SIDE ================= */}
+    <div className="relative flex justify-center items-center min-h-[620px]">
+
+      {/* OUTER ROTATING RING */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{
+          repeat: Infinity,
+          duration: 30,
+          ease: "linear",
+        }}
+        className="
+          absolute
+          w-[360px]
+          h-[360px]
+          md:w-[420px]
+          md:h-[420px]
+          rounded-full
+          border
+          border-blue-500/10
+        "
+      />
+
+      {/* SECOND RING */}
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{
+          repeat: Infinity,
+          duration: 40,
+          ease: "linear",
+        }}
+        className="
+          absolute
+          w-[480px]
+          h-[480px]
+          md:w-[540px]
+          md:h-[540px]
+          rounded-full
+          border
+          border-white/10
+        "
+      />
+
+      {/* ORBIT DOTS */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{
+          repeat: Infinity,
+          duration: 12,
+          ease: "linear",
+        }}
+        className="absolute w-[540px] h-[540px]"
+      >
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.8)]" />
+
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.8)]" />
+
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.8)]" />
+
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-3 h-3 rounded-full bg-pink-400 shadow-[0_0_25px_rgba(244,114,182,0.8)]" />
+      </motion.div>
+
+      {/* FLOATING TAG */}
+      <motion.div
+        animate={{ y: [0, -12, 0] }}
+        transition={{
+          repeat: Infinity,
+          duration: 4,
+        }}
+        className="
+          absolute
+          top-10
+          left-0
+          px-5
+          py-3
+          rounded-2xl
+          backdrop-blur-2xl
+          border border-white/10
+          bg-transparent
+          text-[var(--foreground)]
+          text-sm
+          shadow-[0_15px_40px_rgba(0,0,0,0.2)]
+        "
+      >
+        ⚡ Smooth UI
+      </motion.div>
+
+      {/* FLOATING TAG */}
+      <motion.div
+        animate={{ y: [0, 12, 0] }}
+        transition={{
+          repeat: Infinity,
+          duration: 5,
+        }}
+        className="
+          absolute
+          bottom-10
+          right-0
+          px-5
+          py-3
+          rounded-2xl
+          backdrop-blur-2xl
+          border border-white/10
+          bg-transparent
+          text-[var(--foreground)]
+          text-sm
+          shadow-[0_15px_40px_rgba(0,0,0,0.2)]
+        "
+      >
+        🔥 Modern Animation
+      </motion.div>
+
+      {/* IMAGE */}
+      <motion.div
+        animate={{
+          y: [0, -20, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 5,
+          ease: "easeInOut",
+        }}
+        className="relative z-20"
+      >
+        {/* IMAGE GLOW */}
+        <div className="absolute inset-0 blur-[90px] rounded-full scale-90" />
+
+        <Image
+          src="/my-img-bg-removed.png"
+          alt="Abdullah Babar"
+          width={420}
+          height={620}
+          priority
+          className="
+            relative
+            object-contain
+            select-none
+            drop-shadow-[0_45px_80px_rgba(0,0,0,0.45)]
+          "
+        />
+      </motion.div>
+    </div>
+
+    {/* ================= RIGHT SIDE ================= */}
+    <motion.div
+      initial={{ opacity: 0, x: 60 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1 }}
+      className="space-y-8"
+    >
+
+      {/* BLOCK */}
+      <motion.div
+        whileHover={{
+          y: -10,
+          scale: 1.02,
+        }}
+        transition={{ type: "spring", stiffness: 120 }}
+        className="
+          relative
+          overflow-hidden
+          rounded-[32px]
+          border border-white/10
+          backdrop-blur-2xl
+          bg-transparent
+          p-8
+         
+        "
+      >
+        <div className="absolute inset-0 pointer-events-none" />
+
+        <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-4 relative z-10">
+          Passion
+        </p>
+
+        <h3 className="text-3xl font-bold text-[var(--foreground)] mb-5 relative z-10">
+          Crafting premium digital experiences
+        </h3>
+
+        <p className="text-[var(--foreground)]/70 leading-relaxed text-lg relative z-10">
+          I love building interfaces that feel cinematic, smooth and
+          deeply interactive with modern motion design principles.
+        </p>
+
+        {/* MINI TAGS */}
+        <div className="flex flex-wrap gap-3 mt-7 relative z-10">
+          {["Modern UI", "Animations", "Responsive"].map((item, i) => (
+            <div
+              key={i}
+              className="
+                px-4
+                py-2
+                rounded-full
+                border border-white/10
+                bg-transparent
+                text-sm
+                text-[var(--foreground)]/70
+              "
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* BLOCK */}
+      <motion.div
+        whileHover={{
+          y: -10,
+          scale: 1.02,
+        }}
+        transition={{ type: "spring", stiffness: 120 }}
+        className="
+          relative
+          overflow-hidden
+          rounded-[32px]
+          border border-white/10
+          backdrop-blur-2xl
+          bg-transparent
+          p-8
+          
+        "
+      >
+        <div className="absolute inset-0 pointer-events-none" />
+
+        <p className="uppercase tracking-[0.3em] text-purple-400 text-sm mb-4 relative z-10">
+          Vision
+        </p>
+
+        <h3 className="text-3xl font-bold text-[var(--foreground)] mb-5 relative z-10">
+          Blending aesthetics with performance
+        </h3>
+
+        <p className="text-[var(--foreground)]/70 leading-relaxed text-lg relative z-10">
+          My goal is to create fast, beautiful and immersive web
+          products that feel unforgettable for users.
+        </p>
+
+        {/* MINI TAGS */}
+        <div className="flex flex-wrap gap-3 mt-7 relative z-10">
+          {["Next.js", "Performance", "UX"].map((item, i) => (
+            <div
+              key={i}
+              className="
+                px-4
+                py-2
+                rounded-full
+                border border-white/10
+                bg-transparent
+                text-sm
+                text-[var(--foreground)]/70
+              "
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+    </motion.div>
+  </div>
+</motion.section>
+
+{/* ================== SKILLS SECTION ================== */}
+<motion.section
+  id="skills"
+  initial={{ opacity: 0, y: 60 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  className="max-w-7xl mx-auto mt-40 px-6 relative overflow-hidden"
+>
+  {/* HEADING */}
+  <div className="text-center mb-24">
+    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+      Expertise
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)]">
+      My Skills
+    </h2>
+  </div>
+
+  {/* CENTER AREA */}
+  <div className="relative flex items-center justify-center min-h-[850px]">
+
+    {/* OUTER RING */}
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{
+        repeat: Infinity,
+        duration: 60,
+        ease: "linear",
+      }}
+      className="
+        absolute
+        w-[650px]
+        h-[650px]
+        rounded-full
+        border
+        border-blue-500/10
+      "
+    />
+
+    {/* INNER RING */}
+    <motion.div
+      animate={{ rotate: -360 }}
+      transition={{
+        repeat: Infinity,
+        duration: 40,
+        ease: "linear",
+      }}
+      className="
+        absolute
+        w-[500px]
+        h-[500px]
+        rounded-full
+        border
+        border-white/10
+      "
+    />
+
+    {/* ================= FLOATING INFO CARD — FRONTEND ================= */}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.8 }}
+      animate={{
+        y: [0, -12, 0],
+      }}
+      className="
+        absolute
+        left-0
+        top-24
+        w-[260px]
+        rounded-[28px]
+        border border-white/10
+        backdrop-blur-2xl
+        p-6
+        shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+        hidden lg:block
+      "
+    >
+      <div className="flex items-center gap-4 mb-5">
+        <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+          <FaReact className="text-cyan-400 text-3xl" />
+        </div>
+
+        <div>
+          <h3 className="text-xl font-bold text-[var(--foreground)]">
+            Frontend
+          </h3>
+
+          <p className="text-sm text-[var(--foreground)]/60">
+            Interactive UI
+          </p>
+        </div>
+      </div>
+
+      <p className="text-[15px] leading-relaxed text-[var(--foreground)]/70">
+        Building smooth, responsive and cinematic interfaces using
+        React, Next.js, Tailwind and Framer Motion.
+      </p>
+
+      <div className="flex gap-2 mt-5 flex-wrap">
+        {["React", "Next.js", "Tailwind"].map((item, i) => (
+          <span
+            key={i}
+            className="
+              px-3
+              py-1
+              rounded-full
+              text-xs
+              border border-white/10
+              text-[var(--foreground)]/70
+            "
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* ================= FLOATING INFO CARD — ANIMATION ================= */}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.8 }}
+      animate={{
+        y: [0, 12, 0],
+      }}
+      className="
+        absolute
+        right-0
+        bottom-24
+        w-[260px]
+        rounded-[28px]
+        border border-white/10
+        backdrop-blur-2xl
+        p-6
+        shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+        hidden lg:block
+      "
+    >
+      <div className="flex items-center gap-4 mb-5">
+        <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center">
+          <FaJs className="text-yellow-400 text-3xl" />
+        </div>
+
+        <div>
+          <h3 className="text-xl font-bold text-[var(--foreground)]">
+            Motion & UX
+          </h3>
+
+          <p className="text-sm text-[var(--foreground)]/60">
+            Premium Feel
+          </p>
+        </div>
+      </div>
+
+      <p className="text-[15px] leading-relaxed text-[var(--foreground)]/70">
+        Creating fluid animations, hover interactions and immersive
+        user experiences with modern motion principles.
+      </p>
+
+      <div className="flex gap-2 mt-5 flex-wrap">
+        {["GSAP", "Framer", "UI/UX"].map((item, i) => (
+          <span
+            key={i}
+            className="
+              px-3
+              py-1
+              rounded-full
+              text-xs
+              border border-white/10
+              text-[var(--foreground)]/70
+            "
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* ================= FLOATING STATS ================= */}
+
+<motion.div
+  ref={ref}
+  animate={{
+    y: [0, -10, 0],
+  }}
+  transition={{
+    repeat: Infinity,
+    duration: 4,
+  }}
+  className="
+    absolute
+    top-1/2
+    left-12
+    hidden xl:flex
+    flex-col
+    gap-5
+  "
+>
+  {/* PROJECTS */}
+  <div
+    className="
+      w-40
+      rounded-3xl
+      border border-white/10
+      backdrop-blur-2xl
+      p-5
+      text-center
+      shadow-[0_15px_50px_rgba(0,0,0,0.25)]
+    "
+  >
+    <h4 className="text-4xl font-black text-[var(--foreground)]">
+      {inView && (
+        <>
+          <CountUp end={10} duration={3} />
+          +
+        </>
+      )}
+    </h4>
+
+    <p className="text-sm text-[var(--foreground)]/60 mt-2">
+      Projects Built
+    </p>
+  </div>
+
+  {/* PASSION */}
+  <div
+    className="
+      w-40
+      rounded-3xl
+      border border-white/10
+      backdrop-blur-2xl
+      p-5
+      text-center
+      shadow-[0_15px_50px_rgba(0,0,0,0.25)]
+    "
+  >
+    <h4 className="text-4xl font-black text-[var(--foreground)]">
+      {inView && (
+        <>
+          <CountUp end={100} duration={4} />
+          %
+        </>
+      )}
+    </h4>
+
+    <p className="text-sm text-[var(--foreground)]/60 mt-2">
+      Passion
+    </p>
+  </div>
+</motion.div>
+
+    {/* ================= ROTATING SKILLS ================= */}
+    <motion.div
+      animate={{
+        rotate: 360,
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: 25,
+        ease: "linear",
+      }}
+      className="
+        absolute
+        w-[520px]
+        h-[520px]
+      "
+    >
+      {[
+        {
+          icon: <FaHtml5 className="text-orange-500 text-5xl" />,
+          angle: 0,
+          name: "HTML",
+        },
+        {
+          icon: <FaCss3Alt className="text-blue-500 text-5xl" />,
+          angle: 60,
+          name: "CSS",
+        },
+        {
+          icon: <FaJs className="text-yellow-400 text-5xl" />,
+          angle: 120,
+          name: "JavaScript",
+        },
+        {
+          icon: <FaReact className="text-cyan-400 text-5xl" />,
+          angle: 180,
+          name: "React",
+        },
+        {
+          icon: (
+            <SiNextdotjs className="text-[var(--foreground)] text-5xl" />
+          ),
+          angle: 240,
+          name: "Next.js",
+        },
+        {
+          icon: (
+            <SiPostgresql className="text-indigo-500 dark:text-white text-5xl" />
+          ),
+          angle: 300,
+          name: "PostgreSQL",
+        },
+      ].map((skill, i) => {
+        const radius = expanded ? 220 : 0;
+
+        const x =
+          Math.cos((skill.angle * Math.PI) / 180) * radius;
+
+        const y =
+          Math.sin((skill.angle * Math.PI) / 180) * radius;
+
+        return (
+          <motion.div
+            key={i}
+            animate={{
+              x,
+              y,
+              opacity: expanded ? 1 : 0,
+              scale: expanded ? 1 : 0,
+            }}
+            transition={{
+              delay: i * 0.08,
+              duration: 0.8,
+              type: "spring",
+              stiffness: 120,
+            }}
+            className="
+              absolute
+              top-1/2
+              left-1/2
+              -translate-x-1/2
+              -translate-y-1/2
+            "
+          >
+            {/* COUNTER ROTATION */}
+            <motion.div
+              animate={{
+                rotate: -360,
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 25,
+                ease: "linear",
+              }}
+            >
+              <motion.div
+                whileHover={{
+                  scale: 1.12,
+                  y: -8,
+                }}
+                className="
+                  w-28
+                  h-28
+                  rounded-[30px]
+                  border border-white/10
+                  backdrop-blur-2xl
+                  shadow-[0_15px_50px_rgba(0,0,0,0.3)]
+                  flex flex-col items-center justify-center
+                  gap-3
+                "
               >
                 {skill.icon}
-                <p className="font-semibold text-[var(--foreground)] transition-colors duration-500">{skill.name}</p>
-              </div>
-            ))}
-          </div>
-        </motion.section>
 
-        {/* ================== EXPERIENCE SECTION ================== */}
-        <motion.section
-          id="experience"
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mt-32 px-6"
+                <span className="text-sm text-[var(--foreground)]">
+                  {skill.name}
+                </span>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+
+    {/* ================= CENTER BUTTON ================= */}
+    <motion.button
+      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.08 }}
+      onClick={() => setExpanded(!expanded)}
+      className="
+        relative
+        z-30
+        w-44
+        h-44
+        rounded-full
+        border border-white/10
+        backdrop-blur-3xl
+        overflow-hidden
+        shadow-[0_25px_80px_rgba(0,0,0,0.4)]
+        flex flex-col items-center justify-center
+      "
+    >
+      {/* GLOW */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20" />
+
+      {/* PULSE */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 3,
+        }}
+        className="
+          absolute
+          inset-0
+          rounded-full
+          border
+          border-blue-400/20
+        "
+      />
+
+      <div className="relative z-10 text-center">
+        <h3 className="text-2xl font-bold text-[var(--foreground)]">
+          {expanded ? "Close" : "Explore"}
+        </h3>
+
+        <p className="text-sm text-[var(--foreground)]/70 mt-1">
+          Skills
+        </p>
+      </div>
+    </motion.button>
+  </div>
+</motion.section>
+<motion.section
+  id="experience"
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 1 }}
+  className="max-w-7xl mx-auto mt-40 px-6 relative overflow-hidden"
+>
+  {/* BACKGROUND GLOWS */}
+  <div className="absolute -top-20 left-0 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
+  <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/10 blur-3xl rounded-full" />
+
+  {/* HEADING */}
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-center mb-24 relative z-10"
+  >
+    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+      Journey
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+      Experience
+    </h2>
+
+    <p className="mt-6 text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto">
+      My path of building immersive interfaces, modern web products and
+      continuously evolving as a frontend developer.
+    </p>
+  </motion.div>
+
+  {/* TIMELINE */}
+  <div className="relative max-w-5xl mx-auto">
+
+    {/* CENTER LINE */}
+    <div
+      className="
+        absolute
+        left-1/2
+        top-0
+        -translate-x-1/2
+        w-[2px]
+        h-full
+        bg-gradient-to-b
+        from-blue-500/0
+        via-blue-500/40
+        to-purple-500/0
+        hidden md:block
+      "
+    />
+
+    {[
+      {
+        title: "Freelance Frontend Projects",
+        year: "2025",
+        desc:
+          "Built modern responsive websites and interactive UI experiences using Next.js, Tailwind CSS and Framer Motion.",
+        tech: ["Next.js", "Tailwind", "Framer Motion"],
+        side: "left",
+      },
+
+      {
+        title: "Portfolio & UI Experiments",
+        year: "2025",
+        desc:
+          "Designed cinematic portfolio experiences with immersive animations, smooth transitions and modern layouts.",
+        tech: ["GSAP", "UI/UX", "Animation"],
+        side: "right",
+      },
+
+      {
+        title: "Daily Learning & Building",
+        year: "Present",
+        desc:
+          "Continuously improving through real-world projects, creative experiments and exploring cutting-edge frontend technologies.",
+        tech: ["React", "Performance", "Modern Web"],
+        side: "left",
+      },
+    ].map((item, i) => (
+      <motion.div
+        key={i}
+        initial={{
+          opacity: 0,
+          y: 80,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{
+          delay: i * 0.2,
+          duration: 0.9,
+          ease: "easeOut",
+        }}
+        className={`
+          relative
+          mb-24
+          flex
+          ${item.side === "right"
+            ? "md:justify-end"
+            : "md:justify-start"}
+        `}
+      >
+
+        {/* GLOW DOT */}
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.5, 1, 0.5],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 3,
+          }}
+          className="
+            hidden md:flex
+            absolute
+            left-1/2
+            top-10
+            -translate-x-1/2
+            w-6
+            h-6
+            rounded-full
+            bg-blue-500
+            shadow-[0_0_35px_rgba(59,130,246,0.9)]
+            z-20
+          "
+        />
+
+        {/* CARD */}
+        <motion.div
+          whileHover={{
+            y: -10,
+            scale: 1.02,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 150,
+            damping: 15,
+          }}
+          className="
+            relative
+            w-full
+            md:w-[44%]
+
+            rounded-[34px]
+            border border-white/10
+
+            backdrop-blur-3xl
+
+            p-8
+
+            overflow-hidden
+
+            shadow-[0_20px_70px_rgba(0,0,0,0.25)]
+          "
         >
-          {/* CHANGED: border-blue-500 dark:border-blue-400 -> dark:border-white */}
-          <h2 className="text-4xl font-bold text-center text-[var(--foreground)] transition-colors duration-500 mb-14">
-            Experience
-          </h2>
 
-          <div className="space-y-10 border-l-4 border-blue-500 dark:border-white pl-8">
-            {[
-              {
-                title: "Freelance Frontend Projects",
-                desc: "Built responsive websites and UI for clients using Next.js and Tailwind.",
-              },
-              {
-                title: "Personal Portfolio & UI Experiments",
-                desc: "Created modern animated interfaces to practice smooth UX patterns.",
-              },
-              {
-                title: "Learning & Building Daily",
-                desc: "Continuously improving by building real-world projects and exploring new tools.",
-              },
-            ].map((item, i) => (
-              <div key={i}>
-                <h3 className="text-xl font-semibold text-[var(--foreground)] transition-colors duration-500">{item.title}</h3>
-                <p className="text-[var(--foreground)] mt-1">{item.desc}</p>
-              </div>
-            ))}
+          {/* HOVER GRADIENT */}
+          <div
+            className="
+              absolute
+              inset-0
+              opacity-0
+              hover:opacity-100
+              transition-opacity
+              duration-500
+
+              bg-gradient-to-br
+              from-blue-500/10
+              via-transparent
+              to-purple-500/10
+            "
+          />
+
+          {/* TOP ROW */}
+          <div className="relative z-10 flex items-center justify-between mb-6">
+            <div>
+              <p className="text-sm uppercase tracking-[0.3em] text-blue-400 mb-2">
+                Experience
+              </p>
+
+              <h3 className="text-3xl font-black text-[var(--foreground)]">
+                {item.title}
+              </h3>
+            </div>
+
+            {/* YEAR BADGE */}
+            <div
+              className="
+                px-5
+                py-2
+                rounded-2xl
+                border border-white/10
+                text-sm
+                text-[var(--foreground)]
+                backdrop-blur-xl
+              "
+            >
+              {item.year}
+            </div>
           </div>
-        </motion.section>
 
-        {/* ================== CONTACT SECTION ================== */}
-        <motion.section
-          id="contact"
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-6xl mx-auto mt-32 px-6 text-center"
-        >
-          <h2 className="text-4xl font-bold text-[var(--foreground)] transition-colors duration-500 mb-8">
-            Get In Touch
-          </h2>
-
-          <p className="text-[var(--foreground)] opacity-80 transition-colors duration-500 mb-8">
-            Interested in working together? Feel free to reach out.
+          {/* DESCRIPTION */}
+          <p className="relative z-10 text-[var(--foreground)]/70 leading-relaxed text-lg">
+            {item.desc}
           </p>
 
-          <div className="flex justify-center gap-6">
-  {/* EMAIL BUTTON (Upgraded) */}
-  <Link
-    href="/contact"
-    className="relative inline-flex items-center justify-center px-7 py-3 font-semibold text-white rounded-lg overflow-hidden group transition-transform duration-300 hover:-translate-y-1"
-  >
-    {/* base gradient */}
-    <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-lg transition-all duration-300 group-hover:scale-110"></span>
+          {/* TECH TAGS */}
+          <div className="relative z-10 flex flex-wrap gap-3 mt-8">
+            {item.tech.map((tag, index) => (
+              <motion.div
+                key={index}
+                whileHover={{
+                  scale: 1.08,
+                }}
+                className="
+                  px-4
+                  py-2
+                  rounded-2xl
+                  border border-white/10
+                  backdrop-blur-xl
+                  text-sm
+                  text-[var(--foreground)]/80
+                "
+              >
+                {tag}
+              </motion.div>
+            ))}
+          </div>
 
-    {/* glow layer */}
-    <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-blue-400/40"></span>
-
-    {/* sweep light */}
-    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20"></span>
-
-    {/* border glow */}
-    <span className="absolute inset-0 rounded-lg border border-white/20 group-hover:border-white/40 transition"></span>
-
-    <span className="relative z-10 group-hover:tracking-wide transition-all duration-300">
-      Email Me →
-    </span>
-  </Link>
-
-  {/* INSTAGRAM BUTTON (Upgraded) */}
-  <Link
-    href="https://www.instagram.com/0_abdullah.1?igsh=MTh1dTZ5cjAxcGZoNQ%3D%3D&utm_source=qr"
-    target="_blank"
-    className="relative inline-flex items-center justify-center px-7 py-3 font-semibold rounded-lg overflow-hidden group border border-blue-600 text-blue-600 dark:text-white dark:border-white transition-transform duration-300 hover:-translate-y-1"
-  >
-    {/* hover fill */}
-    <span className="absolute inset-0 bg-blue-600 dark:bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></span>
-
-    {/* glow */}
-    <span className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-blue-400 dark:bg-white blur-xl transition duration-300"></span>
-
-    {/* sweep */}
-    <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20"></span>
-
-    <span className="relative z-10 group-hover:text-white dark:group-hover:text-black transition-colors duration-300 group-hover:tracking-wide">
-      Instagram →
-    </span>
-  </Link>
-</div>
-        </motion.section>
-
-        {/* ================== INFINITE SKILLS MARQUEE ================== */}
-        <div className="max-w-6xl mx-auto w-full overflow-hidden mt-20 py-20 relative z-10">
+          {/* FLOATING LIGHT */}
           <motion.div
-            className="flex w-max gap-24 text-7xl"
-            animate={{ x: ["0%", "-50%"] }}
+            animate={{
+              x: [-100, 250],
+              opacity: [0, 0.6, 0],
+            }}
             transition={{
               repeat: Infinity,
-              duration: 14,
-              ease: "linear",
+              duration: 4,
+              delay: i * 1.2,
             }}
-          >
-            {[FaHtml5, FaCss3Alt, FaJs, FaReact, SiNextdotjs, SiPostgresql,
-              FaHtml5, FaCss3Alt, FaJs, FaReact, SiNextdotjs, SiPostgresql].map((Icon, i) => (
-                <div key={i} className="hover:scale-125 hover:rotate-6 transition duration-300">
-                  {Icon === FaHtml5 && <FaHtml5 className="text-orange-500" />}
-                  {Icon === FaCss3Alt && <FaCss3Alt className="text-blue-500" />}
-                  {Icon === FaJs && <FaJs className="text-yellow-400" />}
-                  {Icon === FaReact && <FaReact className="text-cyan-400" />}
-                  {Icon === SiNextdotjs && <SiNextdotjs className="text-[var(--foreground)]" />}
-                  {Icon === SiPostgresql && <SiPostgresql className="text-indigo-600 dark:text-white" />}
-                </div>
-              ))}
-          </motion.div>
+            className="
+              absolute
+              top-0
+              left-0
+              w-32
+              h-full
+              bg-white/10
+              blur-2xl
+              rotate-12
+            "
+          />
+        </motion.div>
+      </motion.div>
+    ))}
+  </div>
+
+  {/* BOTTOM STATS */}
+  
+</motion.section>
+
+        {/* ================== CONTACT SECTION ================== */}
+<motion.section
+  id="contact"
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 1 }}
+  className="relative max-w-7xl mx-auto mt-40 px-6 overflow-hidden"
+>
+  {/* BACKGROUND GLOWS */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] blur-[140px] rounded-full pointer-events-none" />
+
+  <div className="absolute bottom-0 right-0 w-[400px] h-[400px] blur-[120px] rounded-full pointer-events-none" />
+
+  {/* FLOATING PARTICLES */}
+  {[...Array(10)].map((_, i) => (
+    <motion.div
+      key={i}
+      animate={{
+        y: [0, -30, 0],
+        opacity: [0.3, 1, 0.3],
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: 4 + i,
+      }}
+      className="absolute w-2 h-2 rounded-full border border-white/20"
+      style={{
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+      }}
+    />
+  ))}
+
+  {/* HEADING */}
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-center mb-24 relative z-10"
+  >
+    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+      Contact
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+      Let’s Build
+      <span className="block">
+        Something Amazing
+      </span>
+    </h2>
+
+    <p className="mt-6 text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto leading-relaxed">
+      Have an idea, project or collaboration in mind?
+      Let’s create immersive digital experiences together.
+    </p>
+  </motion.div>
+
+  {/* WRAPPER CONTAINER */}
+  <div
+    className="
+      relative
+      z-10
+      rounded-[40px]
+      border border-white/10
+      backdrop-blur-3xl
+      bg-white/[0.04]
+      
+      p-5 md:p-8
+    "
+  >
+    {/* MAIN GRID */}
+    <div className="grid lg:grid-cols-2 gap-10">
+
+      {/* LEFT CARD */}
+      <motion.div
+        whileHover={{
+          y: -10,
+          scale: 1.02,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 140,
+        }}
+        className="
+          relative
+          overflow-hidden
+          rounded-[36px]
+          border border-white/10
+
+          backdrop-blur-[40px]
+          bg-white/[0.06]
+
+          shadow-[0_15px_50px_rgba(0,0,0,0.2)]
+
+          p-10
+        "
+      >
+        {/* EXTRA GLASS LAYER */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+
+        {/* GLOW */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 pointer-events-none" />
+
+        <div className="relative z-10">
+          <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-5">
+            Why Work With Me
+          </p>
+
+          <h3 className="text-4xl font-black text-[var(--foreground)] mb-6">
+            Premium UI &
+            <br />
+            Smooth Experiences
+          </h3>
+
+          <p className="text-[var(--foreground)]/70 leading-relaxed text-lg">
+            I focus on building modern, cinematic and high-performance
+            web experiences with immersive interactions and polished UI.
+          </p>
+
+          {/* FEATURES */}
+          <div className="mt-10 space-y-5">
+            {[
+              "⚡ Fast Performance",
+              "🎨 Modern UI Design",
+              "🚀 Smooth Animations",
+              "📱 Fully Responsive",
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ x: 10 }}
+                className="
+                  flex
+                  items-center
+                  gap-4
+                  rounded-2xl
+                  border border-white/10
+
+                  backdrop-blur-2xl
+                  bg-white/[0.05]
+
+                  px-5
+                  py-4
+                  text-[var(--foreground)]/80
+                "
+              >
+                {item}
+              </motion.div>
+            ))}
+          </div>
         </div>
+      </motion.div>
+
+      {/* RIGHT SIDE */}
+      <div className="flex flex-col gap-8">
+
+        {/* EMAIL CARD */}
+        <motion.div
+          whileHover={{
+            y: -10,
+            scale: 1.02,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 140,
+          }}
+          className="
+            relative
+            overflow-hidden
+            rounded-[36px]
+            border border-white/10
+
+            backdrop-blur-[40px]
+            bg-white/[0.06]
+
+            shadow-[0_15px_50px_rgba(0,0,0,0.2)]
+
+            p-8
+          "
+        >
+          {/* EXTRA GLASS */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent pointer-events-none" />
+
+          <div className="relative z-10">
+            <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-3">
+              Email
+            </p>
+
+            <h3 className="text-3xl font-black text-[var(--foreground)] mb-4">
+              Start a Project
+            </h3>
+
+            <p className="text-[var(--foreground)]/70 mb-8 leading-relaxed">
+              Let’s discuss your next idea and turn it into an immersive experience.
+            </p>
+
+            <Link
+              href="/contact"
+              className="
+                group
+                relative
+                inline-flex
+                items-center
+                justify-center
+                overflow-hidden
+                rounded-2xl
+                px-8
+                py-4
+                font-semibold
+                text-white
+              "
+            >
+              {/* BG */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 transition-all duration-300 group-hover:scale-110" />
+
+              {/* GLOW */}
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 blur-2xl bg-blue-400/50" />
+
+              {/* SWEEP */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20" />
+
+              <span className="relative z-10 group-hover:tracking-wider transition-all duration-300">
+                Email Me →
+              </span>
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* SOCIAL CARD */}
+        <motion.div
+          whileHover={{
+            y: -10,
+            scale: 1.02,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 140,
+          }}
+          className="
+            relative
+            overflow-hidden
+            rounded-[36px]
+            border border-white/10
+
+            backdrop-blur-[40px]
+            bg-white/[0.06]
+
+            shadow-[0_20px_70px_rgba(0,0,0,0.3)]
+
+            p-8
+          "
+        >
+          {/* EXTRA GLASS */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent pointer-events-none" />
+
+          <div className="relative z-10">
+            <p className="uppercase tracking-[0.3em] text-purple-400 text-sm mb-3">
+              Social
+            </p>
+
+            <h3 className="text-3xl font-black text-[var(--foreground)] mb-4">
+              Let’s Connect
+            </h3>
+
+            <p className="text-[var(--foreground)]/70 mb-8 leading-relaxed">
+              Follow my journey, UI experiments and modern web creations.
+            </p>
+
+            <Link
+              href="https://www.instagram.com/0_abdullah.1"
+              target="_blank"
+              className="
+                group
+                relative
+                inline-flex
+                items-center
+                justify-center
+                overflow-hidden
+                rounded-2xl
+                px-8
+                py-4
+                font-semibold
+                border border-white/10
+                text-[var(--foreground)]
+              "
+            >
+              {/* HOVER FILL */}
+              <span className="absolute inset-0 bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
+
+              {/* GLOW */}
+              <span className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-white blur-2xl transition duration-300" />
+
+              {/* SWEEP */}
+              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20" />
+
+              <span className="relative z-10 group-hover:text-black transition-colors duration-300 group-hover:tracking-wider">
+                Instagram →
+              </span>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  </div>
+</motion.section>
+
+        {/* ================== INFINITE SKILLS MARQUEE ================== */}
+        <div className="max-w-7xl mx-auto w-full overflow-hidden mt-24 py-24 relative z-10">
+
+  {/* TOP FADE */}
+  <div className="absolute top-0 left-0 w-40 h-full bg-gradient-to-r from-[var(--background)] to-transparent z-20 pointer-events-none" />
+
+  {/* RIGHT FADE */}
+  <div className="absolute top-0 right-0 w-40 h-full bg-gradient-to-l from-[var(--background)] to-transparent z-20 pointer-events-none" />
+
+  {/* BACKGROUND GLOW */}
+  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <div className="w-[700px] h-[250px] bg-blue-500/10 blur-[120px] rounded-full" />
+  </div>
+
+  {/* MARQUEE */}
+  <motion.div
+    className="flex w-max gap-16 md:gap-24"
+    animate={{
+      x: ["0%", "-50%"],
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: 18,
+      ease: "linear",
+    }}
+  >
+    {[
+      {
+        icon: <FaHtml5 className="text-orange-500" />,
+        name: "HTML5",
+      },
+      {
+        icon: <FaCss3Alt className="text-blue-500" />,
+        name: "CSS3",
+      },
+      {
+        icon: <FaJs className="text-yellow-400" />,
+        name: "JavaScript",
+      },
+      {
+        icon: <FaReact className="text-cyan-400" />,
+        name: "React",
+      },
+      {
+        icon: <SiNextdotjs className="text-[var(--foreground)]" />,
+        name: "Next.js",
+      },
+      {
+        icon: (
+          <SiPostgresql className="text-indigo-500 dark:text-white" />
+        ),
+        name: "PostgreSQL",
+      },
+
+      // DUPLICATE FOR SMOOTH LOOP
+      {
+        icon: <FaHtml5 className="text-orange-500" />,
+        name: "HTML5",
+      },
+      {
+        icon: <FaCss3Alt className="text-blue-500" />,
+        name: "CSS3",
+      },
+      {
+        icon: <FaJs className="text-yellow-400" />,
+        name: "JavaScript",
+      },
+      {
+        icon: <FaReact className="text-cyan-400" />,
+        name: "React",
+      },
+      {
+        icon: <SiNextdotjs className="text-[var(--foreground)]" />,
+        name: "Next.js",
+      },
+      {
+        icon: (
+          <SiPostgresql className="text-indigo-500 dark:text-white" />
+        ),
+        name: "PostgreSQL",
+      },
+    ].map((skill, i) => (
+      <motion.div
+        key={i}
+        whileHover={{
+          y: -14,
+          scale: 1.08,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 200,
+          damping: 12,
+        }}
+        className="
+          group
+          relative
+          flex
+          flex-col
+          items-center
+          justify-center
+
+          w-36
+          h-36
+
+          rounded-[32px]
+
+          border border-white/10
+
+          backdrop-blur-3xl
+          bg-white/[0.03]
+
+          overflow-hidden
+        "
+      >
+        {/* HOVER GLOW */}
+        <div
+          className="
+            absolute
+            inset-0
+            opacity-0
+            group-hover:opacity-100
+            transition-opacity
+            duration-500
+
+            bg-gradient-to-br
+            from-blue-500/10
+            via-transparent
+            to-purple-500/10
+          "
+        />
+
+        {/* FLOATING LIGHT */}
+        <motion.div
+          animate={{
+            x: [-120, 120],
+            opacity: [0, 0.5, 0],
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: 3.5,
+            delay: i * 0.3,
+          }}
+          className="
+            absolute
+            top-0
+            left-0
+            w-20
+            h-full
+            bg-white/10
+            blur-2xl
+            rotate-12
+          "
+        />
+
+        {/* ICON */}
+        <motion.div
+          whileHover={{
+            rotate: [0, -10, 10, 0],
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="relative z-10 text-6xl"
+        >
+          {skill.icon}
+        </motion.div>
+
+        {/* TEXT */}
+        <p
+          className="
+            relative
+            z-10
+            mt-4
+            text-sm
+            tracking-wide
+            text-[var(--foreground)]/70
+            group-hover:text-[var(--foreground)]
+            transition-colors
+            duration-300
+          "
+        >
+          {skill.name}
+        </p>
+
+        {/* BORDER GLOW */}
+        <div
+          className="
+            absolute
+            inset-0
+            rounded-[32px]
+            opacity-0
+            group-hover:opacity-100
+            transition-opacity
+            duration-500
+
+            shadow-[0_0_40px_rgba(59,130,246,0.25)]
+          "
+        />
+      </motion.div>
+    ))}
+  </motion.div>
+</div>
       </section>
     </ClientWrapper>
   );
