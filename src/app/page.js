@@ -748,147 +748,194 @@ useEffect(() => {
   <div className="grid lg:grid-cols-2 gap-24 items-center relative z-10">
 
     {/* ================= IMAGE SIDE ================= */}
-    <div className="relative flex justify-center items-center min-h-[620px]">
+    {/* ================= IMAGE SIDE ================= */}
+<div className="relative flex justify-center items-center min-h-[420px] md:min-h-[620px] overflow-hidden">
 
-      {/* OUTER ROTATING RING */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{
-          repeat: Infinity,
-          duration: 30,
-          ease: "linear",
-        }}
-        className="
-          absolute
-          w-[360px]
-          h-[360px]
-          md:w-[420px]
-          md:h-[420px]
-          rounded-full
-          border
-          border-blue-500/10
-        "
-      />
+  {/* OUTER ROTATING RING */}
+  <motion.div
+    animate={{ rotate: 360 }}
+    transition={{
+      repeat: Infinity,
+      duration: 30,
+      ease: "linear",
+    }}
+    className="
+      absolute
+      w-[260px]
+      h-[260px]
+      sm:w-[320px]
+      sm:h-[320px]
+      md:w-[420px]
+      md:h-[420px]
+      rounded-full
+      border
+      border-blue-500/10
+    "
+  />
 
-      {/* SECOND RING */}
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{
-          repeat: Infinity,
-          duration: 40,
-          ease: "linear",
-        }}
-        className="
-          absolute
-          w-[480px]
-          h-[480px]
-          md:w-[540px]
-          md:h-[540px]
-          rounded-full
-          border
-          border-white/10
-        "
-      />
+  {/* SECOND RING */}
+  <motion.div
+    animate={{ rotate: -360 }}
+    transition={{
+      repeat: Infinity,
+      duration: 40,
+      ease: "linear",
+    }}
+    className="
+      absolute
+      w-[340px]
+      h-[340px]
+      sm:w-[420px]
+      sm:h-[420px]
+      md:w-[540px]
+      md:h-[540px]
+      rounded-full
+      border
+      border-white/10
+    "
+  />
 
-      {/* ORBIT DOTS */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{
-          repeat: Infinity,
-          duration: 12,
-          ease: "linear",
-        }}
-        className="absolute w-[540px] h-[540px]"
-      >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.8)]" />
+  {/* ORBIT DOTS */}
+  <motion.div
+    animate={{ rotate: 360 }}
+    transition={{
+      repeat: Infinity,
+      duration: 12,
+      ease: "linear",
+    }}
+    className="
+      absolute
+      w-[340px]
+      h-[340px]
+      sm:w-[420px]
+      sm:h-[420px]
+      md:w-[540px]
+      md:h-[540px]
+    "
+  >
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 md:w-5 md:h-5 rounded-full bg-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.8)]" />
 
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.8)]" />
+    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 md:w-4 md:h-4 rounded-full bg-purple-500 shadow-[0_0_25px_rgba(168,85,247,0.8)]" />
 
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.8)]" />
+    <div className="absolute top-1/2 left-0 -translate-y-1/2 w-2 h-2 md:w-3 md:h-3 rounded-full bg-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.8)]" />
 
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-3 h-3 rounded-full bg-pink-400 shadow-[0_0_25px_rgba(244,114,182,0.8)]" />
-      </motion.div>
+    <div className="absolute top-1/2 right-0 -translate-y-1/2 w-2 h-2 md:w-3 md:h-3 rounded-full bg-pink-400 shadow-[0_0_25px_rgba(244,114,182,0.8)]" />
+  </motion.div>
 
-      {/* FLOATING TAG */}
-      <motion.div
-        animate={{ y: [0, -12, 0] }}
-        transition={{
-          repeat: Infinity,
-          duration: 4,
-        }}
-        className="
-          absolute
-          top-10
-          left-0
-          px-5
-          py-3
-          rounded-2xl
-          backdrop-blur-2xl
-          border border-white/10
-          bg-transparent
-          text-[var(--foreground)]
-          text-sm
-          shadow-[0_15px_40px_rgba(0,0,0,0.2)]
-        "
-      >
-        ⚡ Smooth UI
-      </motion.div>
+  {/* FLOATING TAG */}
+  <motion.div
+    animate={{ y: [0, -8, 0] }}
+    transition={{
+      repeat: Infinity,
+      duration: 4,
+    }}
+    className="
+      absolute
+      top-4
+      left-2
+      sm:left-6
+      md:left-0
 
-      {/* FLOATING TAG */}
-      <motion.div
-        animate={{ y: [0, 12, 0] }}
-        transition={{
-          repeat: Infinity,
-          duration: 5,
-        }}
-        className="
-          absolute
-          bottom-10
-          right-0
-          px-5
-          py-3
-          rounded-2xl
-          backdrop-blur-2xl
-          border border-white/10
-          bg-transparent
-          text-[var(--foreground)]
-          text-sm
-          shadow-[0_15px_40px_rgba(0,0,0,0.2)]
-        "
-      >
-        🔥 Modern Animation
-      </motion.div>
+      px-3
+      py-2
+      md:px-5
+      md:py-3
 
-      {/* IMAGE */}
-      <motion.div
-        animate={{
-          y: [0, -20, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 5,
-          ease: "easeInOut",
-        }}
-        className="relative z-20"
-      >
-        {/* IMAGE GLOW */}
-        <div className="absolute inset-0 blur-[90px] rounded-full scale-90" />
+      rounded-2xl
+      backdrop-blur-2xl
+      border border-white/10
+      bg-transparent
 
-        <Image
-          src="/my-img-bg-removed.png"
-          alt="Abdullah Babar"
-          width={420}
-          height={620}
-          priority
-          className="
-            relative
-            object-contain
-            select-none
-            drop-shadow-[0_45px_80px_rgba(0,0,0,0.45)]
-          "
-        />
-      </motion.div>
-    </div>
+      text-[11px]
+      sm:text-xs
+      md:text-sm
+
+      text-[var(--foreground)]
+
+      shadow-[0_15px_40px_rgba(0,0,0,0.2)]
+
+      z-30
+    "
+  >
+    ⚡ Smooth UI
+  </motion.div>
+
+  {/* FLOATING TAG */}
+  <motion.div
+    animate={{ y: [0, 8, 0] }}
+    transition={{
+      repeat: Infinity,
+      duration: 5,
+    }}
+    className="
+      absolute
+      bottom-4
+      right-2
+      sm:right-6
+      md:right-0
+
+      px-3
+      py-2
+      md:px-5
+      md:py-3
+
+      rounded-2xl
+      backdrop-blur-2xl
+      border border-white/10
+      bg-transparent
+
+      text-[11px]
+      sm:text-xs
+      md:text-sm
+
+      text-[var(--foreground)]
+
+      shadow-[0_15px_40px_rgba(0,0,0,0.2)]
+
+      z-30
+    "
+  >
+    🔥 Modern Animation
+  </motion.div>
+
+  {/* IMAGE */}
+  <motion.div
+    animate={{
+      y: [0, -12, 0],
+    }}
+    transition={{
+      repeat: Infinity,
+      duration: 5,
+      ease: "easeInOut",
+    }}
+    className="relative z-20"
+  >
+    {/* IMAGE GLOW */}
+    <div className="absolute inset-0 blur-[60px] md:blur-[90px] rounded-full scale-90" />
+
+    <Image
+      src="/my-img-bg-removed.png"
+      alt="Abdullah Babar"
+      width={420}
+      height={620}
+      priority
+      className="
+        relative
+        object-contain
+        select-none
+
+        w-[220px]
+        sm:w-[280px]
+        md:w-[420px]
+
+        h-auto
+
+        drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)]
+        md:drop-shadow-[0_45px_80px_rgba(0,0,0,0.45)]
+      "
+    />
+  </motion.div>
+</div>
 
     {/* ================= RIGHT SIDE ================= */}
     <motion.div
@@ -1010,27 +1057,26 @@ useEffect(() => {
   </div>
 </motion.section>
 
-{/* ================== SKILLS SECTION ================== */}
 <motion.section
   id="skills"
   initial={{ opacity: 0, y: 60 }}
   whileInView={{ opacity: 1, y: 0 }}
   transition={{ duration: 0.8 }}
-  className="max-w-7xl mx-auto mt-40 px-6 relative overflow-hidden"
+  className="max-w-7xl mx-auto mt-28 md:mt-40 px-4 sm:px-6 relative overflow-hidden"
 >
   {/* HEADING */}
-  <div className="text-center mb-24">
-    <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+  <div className="text-center mb-16 md:mb-24">
+    <p className="uppercase tracking-[0.35em] text-blue-500 text-xs sm:text-sm mb-4">
       Expertise
     </p>
 
-    <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)]">
+    <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-[var(--foreground)]">
       My Skills
     </h2>
   </div>
 
   {/* CENTER AREA */}
-  <div className="relative flex items-center justify-center min-h-[850px]">
+ <div className="relative flex items-center justify-center min-h-[950px] sm:min-h-[760px] md:min-h-[850px]">
 
     {/* OUTER RING */}
     <motion.div
@@ -1042,8 +1088,12 @@ useEffect(() => {
       }}
       className="
         absolute
-        w-[650px]
-        h-[650px]
+        w-[320px]
+        h-[320px]
+        sm:w-[500px]
+        sm:h-[500px]
+        md:w-[650px]
+        md:h-[650px]
         rounded-full
         border
         border-blue-500/10
@@ -1060,8 +1110,12 @@ useEffect(() => {
       }}
       className="
         absolute
-        w-[500px]
-        h-[500px]
+        w-[240px]
+        h-[240px]
+        sm:w-[380px]
+        sm:h-[380px]
+        md:w-[500px]
+        md:h-[500px]
         rounded-full
         border
         border-white/10
@@ -1078,34 +1132,50 @@ useEffect(() => {
       }}
       className="
         absolute
-        left-0
-        top-24
-        w-[260px]
-        rounded-[28px]
+        left-1/2
+        -translate-x-1/2
+        top-0
+
+        sm:left-0
+        sm:translate-x-0
+        sm:top-10
+
+        w-full
+        max-w-[320px]
+        sm:w-[240px]
+        md:w-[260px]
+
+        rounded-[24px]
+        md:rounded-[28px]
+
         border border-white/10
         backdrop-blur-2xl
-        p-6
+
+        p-5
+        md:p-6
+
         shadow-[0_20px_60px_rgba(0,0,0,0.25)]
-        hidden lg:block
+
+        lg:block
       "
     >
       <div className="flex items-center gap-4 mb-5">
-        <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
-          <FaReact className="text-cyan-400 text-3xl" />
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+          <FaReact className="text-cyan-400 text-2xl md:text-3xl" />
         </div>
 
         <div>
-          <h3 className="text-xl font-bold text-[var(--foreground)]">
+          <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)]">
             Frontend
           </h3>
 
-          <p className="text-sm text-[var(--foreground)]/60">
+          <p className="text-xs md:text-sm text-[var(--foreground)]/60">
             Interactive UI
           </p>
         </div>
       </div>
 
-      <p className="text-[15px] leading-relaxed text-[var(--foreground)]/70">
+      <p className="text-sm md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
         Building smooth, responsive and cinematic interfaces using
         React, Next.js, Tailwind and Framer Motion.
       </p>
@@ -1118,7 +1188,8 @@ useEffect(() => {
               px-3
               py-1
               rounded-full
-              text-xs
+              text-[11px]
+              md:text-xs
               border border-white/10
               text-[var(--foreground)]/70
             "
@@ -1139,34 +1210,51 @@ useEffect(() => {
       }}
       className="
         absolute
-        right-0
-        bottom-24
-        w-[260px]
-        rounded-[28px]
+        left-1/2
+        -translate-x-1/2
+        bottom-0
+
+        sm:right-0
+        sm:left-auto
+        sm:translate-x-0
+        sm:bottom-10
+
+        w-full
+        max-w-[320px]
+        sm:w-[240px]
+        md:w-[260px]
+
+        rounded-[24px]
+        md:rounded-[28px]
+
         border border-white/10
         backdrop-blur-2xl
-        p-6
+
+        p-5
+        md:p-6
+
         shadow-[0_20px_60px_rgba(0,0,0,0.25)]
-        hidden lg:block
+
+        lg:block
       "
     >
       <div className="flex items-center gap-4 mb-5">
-        <div className="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center">
-          <FaJs className="text-yellow-400 text-3xl" />
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center">
+          <FaJs className="text-yellow-400 text-2xl md:text-3xl" />
         </div>
 
         <div>
-          <h3 className="text-xl font-bold text-[var(--foreground)]">
+          <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)]">
             Motion & UX
           </h3>
 
-          <p className="text-sm text-[var(--foreground)]/60">
+          <p className="text-xs md:text-sm text-[var(--foreground)]/60">
             Premium Feel
           </p>
         </div>
       </div>
 
-      <p className="text-[15px] leading-relaxed text-[var(--foreground)]/70">
+      <p className="text-sm md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
         Creating fluid animations, hover interactions and immersive
         user experiences with modern motion principles.
       </p>
@@ -1179,7 +1267,8 @@ useEffect(() => {
               px-3
               py-1
               rounded-full
-              text-xs
+              text-[11px]
+              md:text-xs
               border border-white/10
               text-[var(--foreground)]/70
             "
@@ -1191,77 +1280,30 @@ useEffect(() => {
     </motion.div>
 
     {/* ================= FLOATING STATS ================= */}
+    <motion.div
+      ref={ref}
+      animate={{
+        y: [0, -10, 0],
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: 4,
+      }}
+      className="
+        absolute
+        top-1/2
+        left-4
+        -translate-y-1/2
 
-<motion.div
-  ref={ref}
-  animate={{
-    y: [0, -10, 0],
-  }}
-  transition={{
-    repeat: Infinity,
-    duration: 4,
-  }}
-  className="
-    absolute
-    top-1/2
-    left-12
-    hidden xl:flex
-    flex-col
-    gap-5
-  "
->
-  {/* PROJECTS */}
-  <div
-    className="
-      w-40
-      rounded-3xl
-      border border-white/10
-      backdrop-blur-2xl
-      p-5
-      text-center
-      shadow-[0_15px_50px_rgba(0,0,0,0.25)]
-    "
-  >
-    <h4 className="text-4xl font-black text-[var(--foreground)]">
-      {inView && (
-        <>
-          <CountUp end={10} duration={3} />
-          +
-        </>
-      )}
-    </h4>
+        hidden
+        xl:flex
 
-    <p className="text-sm text-[var(--foreground)]/60 mt-2">
-      Projects Built
-    </p>
-  </div>
-
-  {/* PASSION */}
-  <div
-    className="
-      w-40
-      rounded-3xl
-      border border-white/10
-      backdrop-blur-2xl
-      p-5
-      text-center
-      shadow-[0_15px_50px_rgba(0,0,0,0.25)]
-    "
-  >
-    <h4 className="text-4xl font-black text-[var(--foreground)]">
-      {inView && (
-        <>
-          <CountUp end={100} duration={4} />
-          %
-        </>
-      )}
-    </h4>
-
-    <p className="text-sm text-[var(--foreground)]/60 mt-2">
-      Passion
-    </p>
-  </div>
-</motion.div>
+        flex-col
+        gap-5
+      "
+    >
+    
+    </motion.div>
 
     {/* ================= ROTATING SKILLS ================= */}
     <motion.div
@@ -1275,47 +1317,59 @@ useEffect(() => {
       }}
       className="
         absolute
-        w-[520px]
-        h-[520px]
+        w-[260px]
+        h-[260px]
+
+        sm:w-[420px]
+        sm:h-[420px]
+
+        md:w-[520px]
+        md:h-[520px]
       "
     >
       {[
         {
-          icon: <FaHtml5 className="text-orange-500 text-5xl" />,
+          icon: <FaHtml5 className="text-orange-500 text-3xl md:text-5xl" />,
           angle: 0,
           name: "HTML",
         },
         {
-          icon: <FaCss3Alt className="text-blue-500 text-5xl" />,
+          icon: <FaCss3Alt className="text-blue-500 text-3xl md:text-5xl" />,
           angle: 60,
           name: "CSS",
         },
         {
-          icon: <FaJs className="text-yellow-400 text-5xl" />,
+          icon: <FaJs className="text-yellow-400 text-3xl md:text-5xl" />,
           angle: 120,
           name: "JavaScript",
         },
         {
-          icon: <FaReact className="text-cyan-400 text-5xl" />,
+          icon: <FaReact className="text-cyan-400 text-3xl md:text-5xl" />,
           angle: 180,
           name: "React",
         },
         {
           icon: (
-            <SiNextdotjs className="text-[var(--foreground)] text-5xl" />
+            <SiNextdotjs className="text-[var(--foreground)] text-3xl md:text-5xl" />
           ),
           angle: 240,
           name: "Next.js",
         },
         {
           icon: (
-            <SiPostgresql className="text-indigo-500 dark:text-white text-5xl" />
+            <SiPostgresql className="text-indigo-500 dark:text-white text-3xl md:text-5xl" />
           ),
           angle: 300,
           name: "PostgreSQL",
         },
       ].map((skill, i) => {
-        const radius = expanded ? 220 : 0;
+        const radius = expanded
+          ? window.innerWidth < 640
+            ? 130
+            : window.innerWidth < 768
+            ? 170
+            : 220
+          : 0;
 
         const x =
           Math.cos((skill.angle * Math.PI) / 180) * radius;
@@ -1363,19 +1417,31 @@ useEffect(() => {
                   y: -8,
                 }}
                 className="
-                  w-28
-                  h-28
-                  rounded-[30px]
+                  w-20
+                  h-20
+
+                  sm:w-24
+                  sm:h-24
+
+                  md:w-28
+                  md:h-28
+
+                  rounded-[22px]
+                  md:rounded-[30px]
+
                   border border-white/10
                   backdrop-blur-2xl
                   shadow-[0_15px_50px_rgba(0,0,0,0.3)]
+
                   flex flex-col items-center justify-center
-                  gap-3
+
+                  gap-2
+                  md:gap-3
                 "
               >
                 {skill.icon}
 
-                <span className="text-sm text-[var(--foreground)]">
+                <span className="text-[10px] sm:text-xs md:text-sm text-[var(--foreground)]">
                   {skill.name}
                 </span>
               </motion.div>
@@ -1393,13 +1459,25 @@ useEffect(() => {
       className="
         relative
         z-30
-        w-44
-        h-44
+
+        w-28
+        h-28
+
+        sm:w-36
+        sm:h-36
+
+        md:w-44
+        md:h-44
+
         rounded-full
+
         border border-white/10
         backdrop-blur-3xl
+
         overflow-hidden
+
         shadow-[0_25px_80px_rgba(0,0,0,0.4)]
+
         flex flex-col items-center justify-center
       "
     >
@@ -1426,11 +1504,11 @@ useEffect(() => {
       />
 
       <div className="relative z-10 text-center">
-        <h3 className="text-2xl font-bold text-[var(--foreground)]">
-          {expanded ? "Close" : "Explore"}
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[var(--foreground)]">
+          {expanded ? "Close" : "Click To Expolre"}
         </h3>
 
-        <p className="text-sm text-[var(--foreground)]/70 mt-1">
+        <p className="text-[10px] sm:text-xs md:text-sm text-[var(--foreground)]/70 mt-1">
           Skills
         </p>
       </div>
