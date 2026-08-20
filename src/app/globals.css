@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode selector in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===============================
    1. DESIGN TOKENS (SYSTEM CORE)
 ================================ */
@@ -52,7 +55,7 @@
   --muted: #6b7280;
 }
 
-/* 🌙 Dark Mode (CLEAN - NO RED EVER) */
+/* 🌙 Dark Mode */
 .dark {
   --background: #0b0f19;
   --foreground: #ffffff;
@@ -61,7 +64,7 @@
   --muted: #9ca3af;
 }
 
-/* fallback system theme */
+/* Fallback system preference */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     --background: #0b0f19;
@@ -82,7 +85,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* IMPORTANT SAFETY FIX (prevents overrides) */
 html,
 body {
   margin: 0;
