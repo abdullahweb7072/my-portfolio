@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -22,145 +21,10 @@ import {
 import ClientWrapper from "@/Components/ClientWrapper";
 import ThemeToggle from "@/Components/ThemeToggle";
 
-import { useState, useEffect, useRef } from "react";
-import { useInView } from "react-intersection-observer";
-import gsap from "gsap";
+import { useState } from "react";
 
 export default function Home() {
-  const cardRef = useRef(null);
-  const svgRef = useRef(null);
-  const heroRef = useRef(null);
-
   const [expanded, setExpanded] = useState(false);
-
-  const { ref } = useInView({
-    triggerOnce: true,
-    threshold: 0.3,
-  });
-
-  // ============================================================
-  // HERO CARD ANIMATION
-  // ============================================================
-
-  useEffect(() => {
-    const card = cardRef.current;
-    const hero = heroRef.current;
-    const svg = svgRef.current;
-
-    if (!card || !hero || !svg) return;
-
-    const isMobile = window.innerWidth < 768;
-
-    if (isMobile) {
-      gsap.set(card, {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        rotateX: 0,
-        rotateY: 0,
-      });
-
-      return;
-    }
-
-    gsap.set(card, {
-      opacity: 1,
-      transformPerspective: 1200,
-      transformStyle: "preserve-3d",
-    });
-
-    const heroRect = hero.getBoundingClientRect();
-
-    const baseX = heroRect.width * 0.68;
-    const baseY = heroRect.height * 0.08;
-
-    // Floating animation
-    gsap.to(card, {
-      y: "+=18",
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
-    // Breathing scale
-    gsap.to(card, {
-      scale: 1.02,
-      duration: 2.5,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
-    gsap.set(card, {
-      x: baseX,
-      y: baseY,
-    });
-
-    let currentX = 0;
-    let currentY = 0;
-
-    const moveCard = (e) => {
-      const rect = hero.getBoundingClientRect();
-
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      const xPercent = (mouseX / rect.width - 0.5) * 2;
-      const yPercent = (mouseY / rect.height - 0.5) * 2;
-
-      const targetX = xPercent * 25;
-      const targetY = yPercent * 20;
-
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
-
-      gsap.to(card, {
-        x: baseX + currentX,
-        y: baseY + currentY,
-        rotateY: currentX * 0.6,
-        rotateX: -currentY * 0.6,
-        duration: 0.6,
-        ease: "power3.out",
-      });
-
-      // Rope physics
-      const path = svg.querySelector("path");
-
-      if (path) {
-        const nav = document.getElementById("navbar-anchor");
-
-        if (nav) {
-          const navRect = nav.getBoundingClientRect();
-
-          const ax = navRect.left + navRect.width / 2;
-          const ay = navRect.bottom;
-
-          const cardRect = card.getBoundingClientRect();
-
-          const bx = cardRect.left + cardRect.width / 2;
-          const by = cardRect.top;
-
-          const curve = Math.abs(bx - ax) * 0.18;
-
-          const d = `
-            M ${ax} ${ay}
-            C ${ax} ${ay + 180},
-              ${bx} ${by - curve},
-              ${bx} ${by}
-          `;
-
-          path.setAttribute("d", d);
-        }
-      }
-    };
-
-    window.addEventListener("mousemove", moveCard);
-
-    return () => {
-      window.removeEventListener("mousemove", moveCard);
-    };
-  }, []);
 
   // ============================================================
   // PROJECTS
@@ -195,7 +59,9 @@ export default function Home() {
       angle: 0,
     },
     {
-      icon: <SiExpress className="text-[var(--foreground)] text-3xl md:text-5xl" />,
+      icon: (
+        <SiExpress className="text-[var(--foreground)] text-3xl md:text-5xl" />
+      ),
       name: "Express.js",
       angle: 45,
     },
@@ -235,673 +101,1289 @@ export default function Home() {
 
   return (
     <ClientWrapper>
-      <section className="min-h-screen bg-transparent transition-colors duration-500 overflow-x-hidden relative">
+      <section className="relative min-h-screen overflow-x-hidden bg-transparent transition-colors duration-500">
 
         <ThemeToggle />
 
-        {/* NAVBAR ANCHOR */}
-        <div
-          id="navbar-anchor"
-          className="absolute top-0 left-1/2 w-2 h-2"
-        />
+        {/* ========================================================
+            BACKGROUND GLOWS
+        ======================================================== */}
 
-        {/* BACKGROUND GLOWS */}
-        <div className="absolute top-10 left-10 w-96 h-96 bg-blue-300/20 dark:bg-white/5 blur-3xl rounded-full animate-pulse" />
+        <div className="pointer-events-none absolute left-[-120px] top-20 h-72 w-72 rounded-full bg-blue-300/20 blur-3xl dark:bg-white/5 sm:h-96 sm:w-96" />
 
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-300/20 dark:bg-white/5 blur-3xl rounded-full animate-pulse" />
-
-        {/* ROPE */}
-        <svg
-          ref={svgRef}
-          className="absolute inset-0 w-full h-full pointer-events-none hidden md:block"
-        >
-          <path
-            className="stroke-blue-400/60 dark:stroke-white/30 drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]"
-            strokeWidth="2.5"
-            fill="none"
-          />
-        </svg>
+        <div className="pointer-events-none absolute right-[-120px] top-[500px] h-72 w-72 rounded-full bg-purple-300/20 blur-3xl dark:bg-white/5 sm:h-96 sm:w-96" />
 
         {/* ========================================================
             HERO
         ======================================================== */}
 
-        <div className="h-screen flex items-center justify-center px-6 relative z-10">
+        {/* ========================================================
+    HERO SECTION
+======================================================== */}
+
+<section className="relative z-10">
+
+  <div
+    className="
+      mx-auto
+      flex
+      min-h-[auto]
+      w-full
+      max-w-7xl
+      items-center
+      px-5
+      pb-20
+      pt-28
+      sm:px-8
+      sm:pb-24
+      sm:pt-32
+      md:min-h-screen
+      md:px-10
+      md:py-20
+    "
+  >
+
+    <div
+      className="
+        grid
+        w-full
+        grid-cols-1
+        items-center
+        gap-12
+        md:grid-cols-2
+        md:gap-14
+        lg:gap-20
+      "
+    >
+
+      {/* ==================================================
+          LEFT SIDE — HERO CONTENT
+      ================================================== */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: -60,
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+        }}
+        transition={{
+          duration: 0.9,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="
+          order-2
+          space-y-6
+          text-center
+          md:order-1
+          md:text-left
+        "
+      >
+
+        {/* -----------------------------------------------
+            SMALL INTRO LABEL
+        ------------------------------------------------ */}
+
+        <motion.p
+          initial={{
+            opacity: 0,
+            y: -20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.1,
+            duration: 0.6,
+          }}
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.3em]
+            text-blue-500
+            sm:text-sm
+          "
+        >
+          PERN Stack Developer
+        </motion.p>
+
+
+        {/* -----------------------------------------------
+            MAIN HEADING
+        ------------------------------------------------ */}
+
+        <motion.h1
+          initial={{
+            opacity: 0,
+            y: -30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.2,
+            duration: 0.8,
+          }}
+          className="
+            text-3xl
+            font-extrabold
+            leading-[1.12]
+            tracking-tight
+            text-[var(--foreground)]
+            sm:text-4xl
+            md:text-5xl
+            lg:text-6xl
+            xl:text-[4.2rem]
+          "
+        >
+          I build{" "}
+
+          <span
+            className="
+              text-blue-600
+              dark:text-blue-400
+            "
+          >
+            modern, scalable
+          </span>{" "}
+
+          & animated full-stack web experiences
+        </motion.h1>
+
+
+        {/* -----------------------------------------------
+            DESCRIPTION
+        ------------------------------------------------ */}
+
+        <motion.p
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+          }}
+          className="
+            mx-auto
+            max-w-2xl
+            text-base
+            leading-relaxed
+            text-[var(--foreground)]/70
+            sm:text-lg
+            md:mx-0
+          "
+        >
+          I’m Abdullah Babar, a PERN stack developer focused on
+          building scalable full-stack applications using PostgreSQL,
+          Express.js, React and Node.js — with polished interfaces,
+          smooth motion and performance-first architecture.
+        </motion.p>
+
+
+        {/* -----------------------------------------------
+            TECHNOLOGY PILLS
+        ------------------------------------------------ */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 15,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.4,
+            duration: 0.7,
+          }}
+          className="
+            flex
+            flex-wrap
+            justify-center
+            gap-2
+            pt-1
+            md:justify-start
+          "
+        >
+
+          {[
+            "PostgreSQL",
+            "Express.js",
+            "React",
+            "Node.js",
+          ].map((tech) => (
+
+            <span
+              key={tech}
+              className="
+                rounded-full
+                border
+                border-blue-500/20
+                bg-blue-500/[0.06]
+                px-3
+                py-1.5
+                text-xs
+                text-[var(--foreground)]/70
+                backdrop-blur-xl
+                transition-all
+                duration-300
+                hover:border-blue-500/40
+                hover:bg-blue-500/10
+              "
+            >
+              {tech}
+            </span>
+
+          ))}
+
+        </motion.div>
+
+
+        {/* -----------------------------------------------
+            ACTION BUTTONS
+        ------------------------------------------------ */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            delay: 0.5,
+            duration: 0.7,
+          }}
+          className="
+            flex
+            flex-col
+            justify-center
+            gap-3
+            pt-4
+            sm:flex-row
+            sm:flex-wrap
+            md:justify-start
+          "
+        >
+
+          {/* VIEW WORK */}
+
+          <Link
+            href="#projects"
+            className="
+              inline-flex
+              items-center
+              justify-center
+              rounded-lg
+              bg-gradient-to-r
+              from-blue-600
+              via-blue-500
+              to-indigo-600
+              px-6
+              py-3
+              font-semibold
+              text-white
+              shadow-[0_10px_30px_rgba(37,99,235,0.15)]
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:shadow-[0_15px_40px_rgba(37,99,235,0.3)]
+            "
+          >
+            View Work →
+          </Link>
+
+
+          {/* CONTACT */}
+
+          <Link
+            href="/contact"
+            className="
+              inline-flex
+              items-center
+              justify-center
+              rounded-lg
+              border
+              border-blue-500
+              px-6
+              py-3
+              font-semibold
+              text-blue-600
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:bg-blue-600
+              hover:text-white
+              dark:text-white
+            "
+          >
+            Contact Me →
+          </Link>
+
+
+          {/* DOWNLOAD CV */}
+
+          <a
+            href="/Abdullah_Babar_CV.pdf"
+            download
+            className="
+              inline-flex
+              items-center
+              justify-center
+              rounded-lg
+              border
+              border-[var(--foreground)]/20
+              px-6
+              py-3
+              font-semibold
+              text-[var(--foreground)]/80
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:border-[var(--foreground)]/40
+              hover:bg-[var(--foreground)]/[0.05]
+            "
+          >
+            Download CV →
+          </a>
+
+        </motion.div>
+
+      </motion.div>
+
+
+      {/* ==================================================
+          RIGHT SIDE — PROFESSIONAL PORTRAIT
+      ================================================== */}
+
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 50,
+          scale: 0.96,
+        }}
+        animate={{
+          opacity: 1,
+          x: 0,
+          scale: 1,
+        }}
+        transition={{
+          duration: 1,
+          delay: 0.15,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="
+          order-1
+          flex
+          w-full
+          items-center
+          justify-center
+          md:order-2
+        "
+      >
+
+        {/* ==================================================
+            IMAGE CONTAINER
+        ================================================== */}
+
+        <div
+          className="
+            relative
+            flex
+            w-full
+            max-w-[290px]
+            items-center
+            justify-center
+            sm:max-w-[350px]
+            md:max-w-[420px]
+            lg:max-w-[470px]
+          "
+        >
+
+
+          {/* ==================================================
+              MAIN SUBTLE BLUE GLOW
+          ================================================== */}
 
           <div
-            ref={heroRef}
-            className="relative max-w-6xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center w-full px-4 sm:px-6"
+            className="
+              pointer-events-none
+              absolute
+              bottom-[5%]
+              left-1/2
+              h-[65%]
+              w-[70%]
+              -translate-x-1/2
+              rounded-full
+              bg-blue-500/15
+              blur-[90px]
+              dark:bg-blue-500/20
+            "
+          />
+
+
+          {/* ==================================================
+              SECONDARY INDIGO GLOW
+          ================================================== */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              bottom-[15%]
+              left-1/2
+              h-[40%]
+              w-[45%]
+              -translate-x-1/2
+              rounded-full
+              bg-indigo-500/10
+              blur-[70px]
+            "
+          />
+
+
+          {/* ==================================================
+              LEFT FLOATING LABEL
+          ================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: -15,
+            }}
+            animate={{
+              opacity: 1,
+              x: 0,
+            }}
+            transition={{
+              delay: 0.8,
+              duration: 0.6,
+            }}
+            className="
+              absolute
+              left-[-10px]
+              top-[18%]
+              z-20
+              hidden
+              sm:block
+              md:left-[-25px]
+              lg:left-[-35px]
+            "
           >
 
-            {/* ====================================================
-                LEFT SIDE
-            ==================================================== */}
-
-            <motion.div
-              initial={{ opacity: 0, x: -80 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1 }}
-              className="space-y-6 order-2 md:order-1"
-            >
-
-              <motion.p
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="uppercase tracking-[0.35em] text-blue-500 text-xs sm:text-sm font-semibold"
-              >
-                PERN Stack Developer
-              </motion.p>
-
-              <motion.h1
-                initial={{ opacity: 0, y: -40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[var(--foreground)] transition-colors duration-500 leading-tight"
-              >
-                I build{" "}
-                <span className="text-blue-600 dark:text-white underline decoration-white/20">
-                  modern, scalable & animated
-                </span>{" "}
-                full-stack web experiences
-              </motion.h1>
-
-              <p className="text-lg text-[var(--foreground)] opacity-80 transition-colors duration-500 leading-relaxed">
-                I’m Abdullah Babar, a PERN stack developer focused on building
-                scalable full-stack applications using PostgreSQL, Express.js,
-                React and Node.js — with polished interfaces, smooth motion
-                and performance-first architecture.
-              </p>
-
-              {/* STACK HIGHLIGHT */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                {[
-                  "PostgreSQL",
-                  "Express.js",
-                  "React",
-                  "Node.js",
-                ].map((tech) => (
-                  <span
-                    key={tech}
-                    className="
-                      px-3
-                      py-1.5
-                      rounded-full
-                      border
-                      border-blue-500/20
-                      bg-blue-500/[0.06]
-                      text-xs
-                      text-[var(--foreground)]/70
-                      backdrop-blur-xl
-                    "
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* BUTTONS */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-
-                <Link
-                  href="#projects"
-                  className="relative inline-flex items-center justify-center px-6 py-3 font-semibold text-white rounded-lg overflow-hidden group"
-                >
-                  <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 dark:from-zinc-800 dark:to-zinc-700 border dark:border-white/20 rounded-lg transition-all duration-300 group-hover:scale-110" />
-
-                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl bg-blue-400/50 dark:bg-white/10" />
-
-                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-white/20" />
-
-                  <span className="relative z-10 group-hover:tracking-wide transition-all duration-300">
-                    View Work →
-                  </span>
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className="relative inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg overflow-hidden group border border-blue-500 text-blue-600 dark:text-white dark:border-white"
-                >
-                  <span className="absolute inset-0 bg-blue-600 dark:bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-
-                  <span className="absolute inset-0 opacity-0 group-hover:opacity-30 bg-blue-400 dark:bg-white blur-xl transition duration-300" />
-
-                  <span className="relative z-10 group-hover:text-white dark:group-hover:text-black transition-colors duration-300">
-                    Contact Me →
-                  </span>
-                </Link>
-
-                <a
-                  href="/Abdullah_Babar_CV.pdf"
-                  download
-                  className="relative inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg overflow-hidden group border border-[var(--foreground)] text-[var(--foreground)] transition-colors duration-500"
-                >
-                  <span className="absolute inset-0 bg-[var(--foreground)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300" />
-
-                  <span className="relative z-10 group-hover:text-[var(--background)] transition-colors duration-300">
-                    Download CV →
-                  </span>
-                </a>
-
-              </div>
-            </motion.div>
-
-            {/* ====================================================
-                HERO PROFILE CARD
-            ==================================================== */}
-
             <div
-              ref={cardRef}
-              style={{ opacity: 1 }}
               className="
-                z-30
-                bg-white/10 dark:bg-white/5
-                backdrop-blur-3xl
-                border border-white/20
-                shadow-[0_25px_80px_rgba(0,0,0,0.35)]
-                rounded-[24px] md:rounded-[32px]
-                p-3 md:p-5
-                relative
-                mx-auto
-                mt-10
-                md:absolute
-                md:mt-0
-                md:mx-0
-                transition-colors duration-500
-                before:absolute
-                before:inset-0
-                before:rounded-[24px]
-                md:before:rounded-[32px]
-                before:bg-gradient-to-br
-                before:from-white/20
-                before:to-transparent
-                before:pointer-events-none
-                overflow-hidden
+                rounded-xl
+                border
+                border-white/[0.10]
+                bg-white/[0.05]
+                px-3
+                py-2
+                shadow-[0_15px_40px_rgba(0,0,0,0.12)]
+                backdrop-blur-xl
+                dark:border-white/[0.08]
+                dark:bg-white/[0.04]
               "
             >
 
-              <div className="w-52 h-64 sm:w-60 sm:h-72 md:w-72 md:h-80 relative rounded-2xl overflow-hidden">
-                <Image
-                  src="/myimg.jpeg"
-                  alt="About Abdullah"
-                  width={260}
-                  height={260}
-                  className="rounded-2xl shadow-xl object-cover w-full h-full"
-                  priority
+              <div className="flex items-center gap-2">
+
+                <span
+                  className="
+                    h-2
+                    w-2
+                    rounded-full
+                    bg-blue-500
+                    shadow-[0_0_10px_rgba(59,130,246,0.8)]
+                  "
                 />
-              </div>
 
-              <div className="text-center mt-4 md:mt-5">
+                <div>
 
-                <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)] transition-colors duration-500">
-                  Abdullah Babar
-                </h3>
+                  <p
+                    className="
+                      text-[8px]
+                      font-medium
+                      uppercase
+                      tracking-[0.18em]
+                      text-[var(--foreground)]/45
+                    "
+                  >
+                    Role
+                  </p>
 
-                <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">
-                  PERN Stack Developer
-                </p>
+                  <p
+                    className="
+                      whitespace-nowrap
+                      text-[11px]
+                      font-semibold
+                      text-[var(--foreground)]/80
+                    "
+                  >
+                    Full Stack Developer
+                  </p>
 
-                <div className="flex justify-center flex-wrap gap-2 mt-3">
-                  {["PostgreSQL", "Express", "React", "Node.js"].map(
-                    (tech) => (
-                      <span
-                        key={tech}
-                        className="
-                          text-[9px]
-                          px-2
-                          py-1
-                          rounded-full
-                          border
-                          border-white/10
-                          text-[var(--foreground)]/60
-                        "
-                      >
-                        {tech}
-                      </span>
-                    )
-                  )}
                 </div>
 
               </div>
+
             </div>
 
-          </div>
+          </motion.div>
+
+
+          {/* ==================================================
+              RIGHT FLOATING LABEL
+          ================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              x: 15,
+            }}
+            animate={{
+              opacity: 1,
+              x: 0,
+            }}
+            transition={{
+              delay: 1,
+              duration: 0.6,
+            }}
+            className="
+              absolute
+              right-[-10px]
+              bottom-[22%]
+              z-20
+              hidden
+              sm:block
+              md:right-[-25px]
+              lg:right-[-35px]
+            "
+          >
+
+            <div
+              className="
+                rounded-xl
+                border
+                border-white/[0.10]
+                bg-white/[0.05]
+                px-3
+                py-2
+                shadow-[0_15px_40px_rgba(0,0,0,0.12)]
+                backdrop-blur-xl
+                dark:border-white/[0.08]
+                dark:bg-white/[0.04]
+              "
+            >
+
+              <div className="flex items-center gap-2">
+
+                <div className="flex -space-x-1">
+
+                  <span
+                    className="
+                      h-2
+                      w-2
+                      rounded-full
+                      bg-blue-500
+                    "
+                  />
+
+                  <span
+                    className="
+                      h-2
+                      w-2
+                      rounded-full
+                      bg-indigo-500
+                    "
+                  />
+
+                </div>
+
+                <div>
+
+                  <p
+                    className="
+                      text-[8px]
+                      font-medium
+                      uppercase
+                      tracking-[0.18em]
+                      text-[var(--foreground)]/45
+                    "
+                  >
+                    Stack
+                  </p>
+
+                  <p
+                    className="
+                      whitespace-nowrap
+                      text-[11px]
+                      font-semibold
+                      text-[var(--foreground)]/80
+                    "
+                  >
+                    PERN Stack
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </motion.div>
+
+
+          {/* ==================================================
+              PROFESSIONAL PORTRAIT
+          ================================================== */}
+
+          <motion.div
+            animate={{
+              y: [0, -6, 0],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="
+              relative
+              z-10
+              w-full
+            "
+          >
+
+            <Image
+              src="/my-img-bg-removed.png"
+              alt="Abdullah Babar - Full Stack Developer"
+              width={520}
+              height={700}
+              priority
+              className="
+                mx-auto
+                h-auto
+                w-auto
+                max-w-full
+                select-none
+                object-contain
+                drop-shadow-[0_30px_60px_rgba(0,0,0,0.28)]
+                dark:drop-shadow-[0_35px_75px_rgba(0,0,0,0.55)]
+              "
+            />
+
+          </motion.div>
+
+
+          {/* ==================================================
+              SUBTLE FLOOR SHADOW
+          ================================================== */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              bottom-0
+              left-1/2
+              z-0
+              h-7
+              w-[60%]
+              -translate-x-1/2
+              rounded-full
+              bg-black/15
+              blur-2xl
+              dark:bg-black/30
+            "
+          />
+
         </div>
+
+      </motion.div>
+
+    </div>
+
+  </div>
+
+</section>
 
         {/* ========================================================
             PROJECTS
         ======================================================== */}
 
-       {/* ========================================================
-    PROJECTS
-======================================================== */}
+        <motion.section
+          id="projects"
+          initial={{ opacity: 0, y: 60 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.8 }}
+          className="
+            relative
+            z-10
+            mt-4
+            border-t
+            border-white/[0.06]
+            py-20
+            md:mt-8
+            md:py-24
+          "
+        >
 
-<motion.section
-  id="projects"
-  initial={{ opacity: 0, y: 60 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true, amount: 0.15 }}
-  transition={{ duration: 0.8 }}
-  className="relative py-20 md:py-24 overflow-hidden"
->
-  {/* BACKGROUND GLOW */}
-  <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/[0.06] blur-[120px] rounded-full pointer-events-none" />
+          {/* BACKGROUND GLOW */}
 
-  <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-purple-500/[0.05] blur-[100px] rounded-full pointer-events-none" />
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-10
+              h-[300px]
+              w-[600px]
+              -translate-x-1/2
+              rounded-full
+              bg-blue-500/[0.06]
+              blur-[120px]
+            "
+          />
 
-  {/* ======================================================
-      SECTION HEADER
-  ====================================================== */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              bottom-0
+              right-0
+              h-[300px]
+              w-[300px]
+              rounded-full
+              bg-purple-500/[0.05]
+              blur-[100px]
+            "
+          />
 
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.7 }}
-    className="max-w-6xl mx-auto px-6 text-center mb-14 md:mb-16 relative z-10"
-  >
-    <div className="flex items-center justify-center gap-3 mb-4">
-      <span className="w-8 h-px bg-blue-500" />
+          {/* SECTION HEADER */}
 
-      <p className="uppercase tracking-[0.3em] text-blue-500 text-xs sm:text-sm font-semibold">
-        Selected Work
-      </p>
-
-      <span className="w-8 h-px bg-blue-500" />
-    </div>
-
-    <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-[var(--foreground)] leading-tight">
-      Projects
-    </h2>
-
-    <p className="mt-5 text-sm sm:text-base md:text-lg text-[var(--foreground)]/60 max-w-xl mx-auto leading-relaxed">
-      A selection of full-stack applications built with modern
-      technologies, scalable architecture and polished user experiences.
-    </p>
-  </motion.div>
-
-  {/* ======================================================
-      PROJECT GRID
-  ====================================================== */}
-
-  <div className="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
-
-    <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{
-        once: true,
-        amount: 0.1,
-      }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: 0.12,
-          },
-        },
-      }}
-      className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
-    >
-      {projects.map((project, i) => {
-
-        const technologies = {
-          "ChatHub": [
-            "Next.js",
-            "Node.js",
-            "PostgreSQL",
-          ],
-
-          "Image Tools": [
-            "Next.js",
-            "React",
-            "API",
-          ],
-
-          "Luxury Cars Site": [
-            "Next.js",
-            "React",
-            "Tailwind",
-          ],
-        };
-
-        return (
           <motion.div
-            key={project.title}
-            variants={{
-              hidden: {
-                opacity: 0,
-                y: 50,
-              },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  duration: 0.7,
-                  ease: [0.22, 1, 0.36, 1],
-                },
-              },
-            }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="
+              relative
+              z-10
+              mx-auto
+              mb-14
+              max-w-6xl
+              px-5
+              text-center
+              sm:px-6
+              md:mb-16
+            "
           >
 
-            <Link
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group"
-            >
+            <div className="mb-4 flex items-center justify-center gap-3">
 
-              <motion.article
-                whileHover={{
-                  y: -8,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 220,
-                  damping: 20,
-                }}
+              <span className="h-px w-8 bg-blue-500" />
+
+              <p
                 className="
-                  relative
-                  h-full
-                  rounded-[24px]
-                  overflow-hidden
-                  border border-white/[0.09]
-                  bg-white/[0.025]
-                  backdrop-blur-2xl
-                  shadow-[0_20px_60px_rgba(0,0,0,0.22)]
-                  transition-all
-                  duration-500
-                  group-hover:border-blue-500/30
-                  group-hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)]
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-[0.3em]
+                  text-blue-500
+                  sm:text-sm
                 "
               >
+                Selected Work
+              </p>
 
-                {/* ==================================================
-                    IMAGE
-                ================================================== */}
+              <span className="h-px w-8 bg-blue-500" />
 
-                <div className="relative h-[240px] sm:h-[250px] overflow-hidden">
+            </div>
 
-                  <motion.div
-                    whileHover={{
-                      scale: 1.06,
-                    }}
-                    transition={{
-                      duration: 0.7,
-                      ease: "easeOut",
-                    }}
-                    className="absolute inset-0"
-                  >
+            <h2
+              className="
+                text-4xl
+                font-black
+                leading-tight
+                text-[var(--foreground)]
+                sm:text-5xl
+                md:text-6xl
+              "
+            >
+              Projects
+            </h2>
 
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="
-                        object-cover
-                        brightness-[0.72]
-                        saturate-[0.85]
-                        transition-all
-                        duration-700
-                        group-hover:brightness-[0.9]
-                        group-hover:saturate-100
-                      "
-                    />
-
-                  </motion.div>
-
-                  {/* IMAGE GRADIENT */}
-
-                  <div
-                    className="
-                      absolute
-                      inset-0
-                      bg-gradient-to-t
-                      from-black/80
-                      via-black/20
-                      to-transparent
-                    "
-                  />
-
-                  {/* PROJECT NUMBER */}
-
-                  <div
-                    className="
-                      absolute
-                      top-4
-                      left-4
-                      w-10
-                      h-10
-                      rounded-xl
-                      border
-                      border-white/15
-                      bg-black/40
-                      backdrop-blur-xl
-                      flex
-                      items-center
-                      justify-center
-                      z-20
-                    "
-                  >
-                    <span className="text-xs font-bold text-white/80">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  {/* OPEN PROJECT */}
-
-                  <div
-                    className="
-                      absolute
-                      top-4
-                      right-4
-                      w-10
-                      h-10
-                      rounded-xl
-                      border
-                      border-white/15
-                      bg-black/40
-                      backdrop-blur-xl
-                      flex
-                      items-center
-                      justify-center
-                      z-20
-                      opacity-0
-                      translate-y-2
-                      group-hover:opacity-100
-                      group-hover:translate-y-0
-                      transition-all
-                      duration-300
-                    "
-                  >
-                    <span className="text-white text-lg">
-                      ↗
-                    </span>
-                  </div>
-
-                  {/* IMAGE TITLE */}
-
-                  <div
-                    className="
-                      absolute
-                      bottom-5
-                      left-5
-                      right-5
-                      z-20
-                    "
-                  >
-
-                    <span
-                      className="
-                        inline-flex
-                        items-center
-                        px-3
-                        py-1
-                        rounded-full
-                        bg-white/10
-                        border
-                        border-white/10
-                        backdrop-blur-xl
-                        text-[9px]
-                        uppercase
-                        tracking-[0.2em]
-                        text-white/70
-                      "
-                    >
-                      Full-Stack Project
-                    </span>
-
-                  </div>
-
-                </div>
-
-                {/* ==================================================
-                    CONTENT
-                ================================================== */}
-
-                <div className="p-5 sm:p-6">
-
-                  <div className="flex items-start justify-between gap-4">
-
-                    <div>
-
-                      <h3
-                        className="
-                          text-xl
-                          sm:text-2xl
-                          font-bold
-                          text-[var(--foreground)]
-                          transition-colors
-                          duration-300
-                          group-hover:text-blue-500
-                        "
-                      >
-                        {project.title}
-                      </h3>
-
-                      <p
-                        className="
-                          mt-2
-                          text-sm
-                          text-[var(--foreground)]/55
-                          leading-relaxed
-                        "
-                      >
-                        Modern web application focused on performance,
-                        responsive design and interactive user experience.
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                  {/* TECHNOLOGIES */}
-
-                  <div className="flex flex-wrap gap-2 mt-5">
-
-                    {technologies[project.title]?.map((tech) => (
-                      <span
-                        key={tech}
-                        className="
-                          px-2.5
-                          py-1
-                          rounded-full
-                          border
-                          border-white/[0.08]
-                          bg-white/[0.03]
-                          text-[10px]
-                          sm:text-[11px]
-                          text-[var(--foreground)]/55
-                          transition-all
-                          duration-300
-                          group-hover:border-blue-500/20
-                          group-hover:text-[var(--foreground)]/70
-                        "
-                      >
-                        {tech}
-                      </span>
-                    ))}
-
-                  </div>
-
-                  {/* DIVIDER */}
-
-                  <div className="h-px bg-white/[0.07] my-5" />
-
-                  {/* FOOTER */}
-
-                  <div className="flex items-center justify-between">
-
-                    <span
-                      className="
-                        text-xs
-                        font-medium
-                        text-[var(--foreground)]/45
-                        group-hover:text-blue-500
-                        transition-colors
-                        duration-300
-                      "
-                    >
-                      View Project
-                    </span>
-
-                    <span
-                      className="
-                        flex
-                        items-center
-                        justify-center
-                        w-8
-                        h-8
-                        rounded-full
-                        border
-                        border-white/10
-                        text-[var(--foreground)]/50
-                        group-hover:border-blue-500/40
-                        group-hover:text-blue-500
-                        group-hover:translate-x-1
-                        transition-all
-                        duration-300
-                      "
-                    >
-                      →
-                    </span>
-
-                  </div>
-
-                </div>
-
-                {/* ==================================================
-                    SUBTLE HOVER LIGHT
-                ================================================== */}
-
-                <div
-                  className="
-                    absolute
-                    inset-0
-                    pointer-events-none
-                    opacity-0
-                    group-hover:opacity-100
-                    transition-opacity
-                    duration-500
-                    bg-gradient-to-br
-                    from-blue-500/[0.05]
-                    via-transparent
-                    to-purple-500/[0.04]
-                  "
-                />
-
-              </motion.article>
-
-            </Link>
+            <p
+              className="
+                mx-auto
+                mt-5
+                max-w-xl
+                text-sm
+                leading-relaxed
+                text-[var(--foreground)]/60
+                sm:text-base
+                md:text-lg
+              "
+            >
+              A selection of full-stack applications built with modern
+              technologies, scalable architecture and polished user
+              experiences.
+            </p>
 
           </motion.div>
-        );
-      })}
-    </motion.div>
 
-  </div>
+          {/* PROJECT GRID */}
 
-</motion.section>
+          <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-6">
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.1,
+              }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.12,
+                  },
+                },
+              }}
+              className="
+                grid
+                grid-cols-1
+                gap-6
+                md:grid-cols-2
+                xl:grid-cols-3
+              "
+            >
+
+              {projects.map((project, i) => {
+
+                const technologies = {
+                  ChatHub: [
+                    "Next.js",
+                    "Node.js",
+                    "PostgreSQL",
+                  ],
+
+                  "Image Tools": [
+                    "Next.js",
+                    "React",
+                    "API",
+                  ],
+
+                  "Luxury Cars Site": [
+                    "Next.js",
+                    "React",
+                    "Tailwind",
+                  ],
+                };
+
+                return (
+                  <motion.div
+                    key={project.title}
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 50,
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                  >
+
+                    <Link
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group"
+                    >
+
+                      <motion.article
+                        whileHover={{
+                          y: -8,
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 220,
+                          damping: 20,
+                        }}
+                        className="
+                          relative
+                          h-full
+                          overflow-hidden
+                          rounded-[24px]
+                          border
+                          border-white/[0.09]
+                          bg-white/[0.025]
+                          shadow-[0_20px_60px_rgba(0,0,0,0.22)]
+                          backdrop-blur-2xl
+                          transition-all
+                          duration-500
+                          group-hover:border-blue-500/30
+                          group-hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)]
+                        "
+                      >
+
+                        {/* IMAGE */}
+
+                        <div
+                          className="
+                            relative
+                            h-[220px]
+                            overflow-hidden
+                            sm:h-[250px]
+                          "
+                        >
+
+                          <motion.div
+                            whileHover={{
+                              scale: 1.06,
+                            }}
+                            transition={{
+                              duration: 0.7,
+                              ease: "easeOut",
+                            }}
+                            className="absolute inset-0"
+                          >
+
+                            <Image
+                              src={project.image}
+                              alt={project.title}
+                              fill
+                              className="
+                                object-cover
+                                brightness-[0.72]
+                                saturate-[0.85]
+                                transition-all
+                                duration-700
+                                group-hover:brightness-[0.9]
+                                group-hover:saturate-100
+                              "
+                            />
+
+                          </motion.div>
+
+                          {/* IMAGE GRADIENT */}
+
+                          <div
+                            className="
+                              absolute
+                              inset-0
+                              bg-gradient-to-t
+                              from-black/80
+                              via-black/20
+                              to-transparent
+                            "
+                          />
+
+                          {/* PROJECT NUMBER */}
+
+                          <div
+                            className="
+                              absolute
+                              left-4
+                              top-4
+                              z-20
+                              flex
+                              h-10
+                              w-10
+                              items-center
+                              justify-center
+                              rounded-xl
+                              border
+                              border-white/15
+                              bg-black/40
+                              backdrop-blur-xl
+                            "
+                          >
+                            <span className="text-xs font-bold text-white/80">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                          </div>
+
+                          {/* OPEN PROJECT */}
+
+                          <div
+                            className="
+                              absolute
+                              right-4
+                              top-4
+                              z-20
+                              flex
+                              h-10
+                              w-10
+                              translate-y-2
+                              items-center
+                              justify-center
+                              rounded-xl
+                              border
+                              border-white/15
+                              bg-black/40
+                              opacity-0
+                              backdrop-blur-xl
+                              transition-all
+                              duration-300
+                              group-hover:translate-y-0
+                              group-hover:opacity-100
+                            "
+                          >
+                            <span className="text-lg text-white">
+                              ↗
+                            </span>
+                          </div>
+
+                          {/* IMAGE LABEL */}
+
+                          <div
+                            className="
+                              absolute
+                              bottom-5
+                              left-5
+                              right-5
+                              z-20
+                            "
+                          >
+                            <span
+                              className="
+                                inline-flex
+                                items-center
+                                rounded-full
+                                border
+                                border-white/10
+                                bg-white/10
+                                px-3
+                                py-1
+                                text-[9px]
+                                uppercase
+                                tracking-[0.2em]
+                                text-white/70
+                                backdrop-blur-xl
+                              "
+                            >
+                              Full-Stack Project
+                            </span>
+                          </div>
+
+                        </div>
+
+                        {/* CONTENT */}
+
+                        <div className="p-5 sm:p-6">
+
+                          <h3
+                            className="
+                              text-xl
+                              font-bold
+                              text-[var(--foreground)]
+                              transition-colors
+                              duration-300
+                              group-hover:text-blue-500
+                              sm:text-2xl
+                            "
+                          >
+                            {project.title}
+                          </h3>
+
+                          <p
+                            className="
+                              mt-2
+                              text-sm
+                              leading-relaxed
+                              text-[var(--foreground)]/55
+                            "
+                          >
+                            Modern web application focused on performance,
+                            responsive design and interactive user experience.
+                          </p>
+
+                          {/* TECHNOLOGIES */}
+
+                          <div className="mt-5 flex flex-wrap gap-2">
+
+                            {technologies[project.title]?.map((tech) => (
+                              <span
+                                key={tech}
+                                className="
+                                  rounded-full
+                                  border
+                                  border-white/[0.08]
+                                  bg-white/[0.03]
+                                  px-2.5
+                                  py-1
+                                  text-[10px]
+                                  text-[var(--foreground)]/55
+                                  transition-all
+                                  duration-300
+                                  group-hover:border-blue-500/20
+                                  group-hover:text-[var(--foreground)]/70
+                                  sm:text-[11px]
+                                "
+                              >
+                                {tech}
+                              </span>
+                            ))}
+
+                          </div>
+
+                          {/* DIVIDER */}
+
+                          <div className="my-5 h-px bg-white/[0.07]" />
+
+                          {/* FOOTER */}
+
+                          <div className="flex items-center justify-between">
+
+                            <span
+                              className="
+                                text-xs
+                                font-medium
+                                text-[var(--foreground)]/45
+                                transition-colors
+                                duration-300
+                                group-hover:text-blue-500
+                              "
+                            >
+                              View Project
+                            </span>
+
+                            <span
+                              className="
+                                flex
+                                h-8
+                                w-8
+                                items-center
+                                justify-center
+                                rounded-full
+                                border
+                                border-white/10
+                                text-[var(--foreground)]/50
+                                transition-all
+                                duration-300
+                                group-hover:translate-x-1
+                                group-hover:border-blue-500/40
+                                group-hover:text-blue-500
+                              "
+                            >
+                              →
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                        {/* SUBTLE HOVER LIGHT */}
+
+                        <div
+                          className="
+                            pointer-events-none
+                            absolute
+                            inset-0
+                            bg-gradient-to-br
+                            from-blue-500/[0.05]
+                            via-transparent
+                            to-purple-500/[0.04]
+                            opacity-0
+                            transition-opacity
+                            duration-500
+                            group-hover:opacity-100
+                          "
+                        />
+
+                      </motion.article>
+
+                    </Link>
+
+                  </motion.div>
+                );
+              })}
+
+            </motion.div>
+
+          </div>
+
+        </motion.section>
+
+        {/* ========================================================
+            KEEP YOUR EXISTING ABOUT SECTION HERE
+            ======================================================== */}
+
+        {/* 
+          Paste your existing ABOUT section here.
+          It starts with:
+
+          <motion.section
+            id="about"
+            ...
+
+          and ends before the SKILLS section.
+        */}
+
+
+        {/* ========================================================
+            KEEP YOUR EXISTING SKILLS SECTION HERE
+            ======================================================== */}
+
+        {/* 
+          Paste your existing SKILLS section here.
+          It starts with:
+
+          <motion.section
+            id="skills"
+            ...
+
+          and ends before EXPERIENCE.
+        */}
+
+
+        {/* ========================================================
+            KEEP YOUR EXISTING EXPERIENCE SECTION HERE
+            ======================================================== */}
+
+        {/* 
+          Paste your existing EXPERIENCE section here.
+        */}
+
+
+        {/* ========================================================
+            KEEP YOUR EXISTING CONTACT SECTION HERE
+            ======================================================== */}
+
+        {/* 
+          Paste your existing CONTACT section here.
+        */}
+
+
+        {/* ========================================================
+            KEEP YOUR EXISTING INFINITE STACK MARQUEE HERE
+            ======================================================== */}
+
+        {/* 
+          Paste your existing marquee section here.
+        */}
+
 
         {/* ========================================================
             ABOUT
@@ -912,7 +1394,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-7xl mx-auto mt-40 px-6 relative"
+          className="max-w-7xl mx-auto mt-28 md:mt-40 px-6 relative"
         >
 
           <div className="absolute top-20 left-[10%] w-[420px] h-[420px] rounded-full bg-blue-500/[0.05] blur-[130px] pointer-events-none" />
@@ -923,14 +1405,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-24 relative z-10"
+            className="text-center mb-16 md:mb-24 relative z-10"
           >
 
-            <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+            <p className="uppercase tracking-[0.4em] text-blue-500 text-xs sm:text-sm mb-4">
               About Me
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
               Building
               <span className="block">
                 full-stack experiences
@@ -939,7 +1421,7 @@ export default function Home() {
 
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-20 lg:gap-24 items-center relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center relative z-10">
 
             {/* PROFILE */}
             <motion.div
@@ -966,7 +1448,7 @@ export default function Home() {
                   relative
                   w-full
                   max-w-[470px]
-                  h-[540px]
+                  h-[480px]
                   sm:h-[590px]
                   rounded-[36px]
                   overflow-hidden
@@ -1124,6 +1606,7 @@ export default function Home() {
                   ease: "easeInOut",
                 }}
                 className="
+                  hidden sm:block
                   absolute
                   -right-2
                   sm:-right-5
@@ -1165,6 +1648,7 @@ export default function Home() {
                   ease: "easeInOut",
                 }}
                 className="
+                  hidden sm:block
                   absolute
                   -left-2
                   sm:-left-5
@@ -1198,7 +1682,7 @@ export default function Home() {
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
-              className="space-y-8"
+              className="space-y-6 md:space-y-8"
             >
 
               {/* PASSION */}
@@ -1215,33 +1699,33 @@ export default function Home() {
                   group
                   relative
                   overflow-hidden
-                  rounded-[32px]
+                  rounded-[28px] sm:rounded-[32px]
                   border
                   border-white/10
                   backdrop-blur-2xl
                   bg-transparent
-                  p-8
+                  p-6 sm:p-8
                 "
               >
 
                 <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-blue-500/[0.07] blur-[70px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-4 relative z-10">
+                <p className="uppercase tracking-[0.3em] text-blue-400 text-xs sm:text-sm mb-4 relative z-10">
                   Full-Stack Development
                 </p>
 
-                <h3 className="text-3xl font-bold text-[var(--foreground)] mb-5 relative z-10">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] mb-4 relative z-10">
                   Building complete digital products
                 </h3>
 
-                <p className="text-[var(--foreground)]/70 leading-relaxed text-lg relative z-10">
+                <p className="text-[var(--foreground)]/70 leading-relaxed text-base sm:text-lg relative z-10">
                   I enjoy building applications from database to interface —
                   designing PostgreSQL schemas, developing REST APIs with
                   Express.js and Node.js, and creating polished React
                   experiences on top.
                 </p>
 
-                <div className="flex flex-wrap gap-3 mt-7 relative z-10">
+                <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 relative z-10">
 
                   {[
                     "PostgreSQL",
@@ -1252,13 +1736,13 @@ export default function Home() {
                     <div
                       key={item}
                       className="
-                        px-4
-                        py-2
+                        px-3 sm:px-4
+                        py-1.5 sm:py-2
                         rounded-full
                         border
                         border-white/10
                         bg-transparent
-                        text-sm
+                        text-xs sm:text-sm
                         text-[var(--foreground)]/70
                       "
                     >
@@ -1284,32 +1768,32 @@ export default function Home() {
                   group
                   relative
                   overflow-hidden
-                  rounded-[32px]
+                  rounded-[28px] sm:rounded-[32px]
                   border
                   border-white/10
                   backdrop-blur-2xl
                   bg-transparent
-                  p-8
+                  p-6 sm:p-8
                 "
               >
 
                 <div className="absolute -bottom-24 -right-24 w-48 h-48 rounded-full bg-purple-500/[0.07] blur-[70px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                <p className="uppercase tracking-[0.3em] text-purple-400 text-sm mb-4 relative z-10">
+                <p className="uppercase tracking-[0.3em] text-purple-400 text-xs sm:text-sm mb-4 relative z-10">
                   Vision
                 </p>
 
-                <h3 className="text-3xl font-bold text-[var(--foreground)] mb-5 relative z-10">
+                <h3 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] mb-4 relative z-10">
                   Blending architecture with experience
                 </h3>
 
-                <p className="text-[var(--foreground)]/70 leading-relaxed text-lg relative z-10">
+                <p className="text-[var(--foreground)]/70 leading-relaxed text-base sm:text-lg relative z-10">
                   My goal is to combine reliable backend architecture with
                   beautiful frontend experiences — creating applications
                   that are scalable, fast, responsive and memorable.
                 </p>
 
-                <div className="flex flex-wrap gap-3 mt-7 relative z-10">
+                <div className="flex flex-wrap gap-2 sm:gap-3 mt-6 relative z-10">
 
                   {[
                     "REST APIs",
@@ -1320,13 +1804,13 @@ export default function Home() {
                     <div
                       key={item}
                       className="
-                        px-4
-                        py-2
+                        px-3 sm:px-4
+                        py-1.5 sm:py-2
                         rounded-full
                         border
                         border-white/10
                         bg-transparent
-                        text-sm
+                        text-xs sm:text-sm
                         text-[var(--foreground)]/70
                       "
                     >
@@ -1365,7 +1849,7 @@ export default function Home() {
               My Skills
             </h2>
 
-            <p className="mt-6 text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto">
+            <p className="mt-6 text-base sm:text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto">
               From PostgreSQL databases and Node.js APIs to React interfaces
               and modern motion design, I build across the full application
               stack.
@@ -1373,7 +1857,7 @@ export default function Home() {
 
           </div>
 
-          <div className="relative flex items-center justify-center min-h-[1050px] sm:min-h-[850px] md:min-h-[900px]">
+          <div className="relative flex items-center justify-center min-h-[800px] sm:min-h-[850px] md:min-h-[900px]">
 
             {/* OUTER RING */}
             <motion.div
@@ -1385,8 +1869,8 @@ export default function Home() {
               }}
               className="
                 absolute
-                w-[320px]
-                h-[320px]
+                w-[280px]
+                h-[280px]
                 sm:w-[500px]
                 sm:h-[500px]
                 md:w-[700px]
@@ -1407,8 +1891,8 @@ export default function Home() {
               }}
               className="
                 absolute
-                w-[240px]
-                h-[240px]
+                w-[200px]
+                h-[200px]
                 sm:w-[380px]
                 sm:h-[380px]
                 md:w-[540px]
@@ -1436,7 +1920,7 @@ export default function Home() {
                 sm:translate-x-0
                 sm:top-10
                 w-full
-                max-w-[320px]
+                max-w-[280px]
                 sm:w-[240px]
                 md:w-[260px]
                 rounded-[24px]
@@ -1449,15 +1933,15 @@ export default function Home() {
               "
             >
 
-              <div className="flex items-center gap-4 mb-5">
+              <div className="flex items-center gap-4 mb-4 md:mb-5">
 
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                   <FaReact className="text-cyan-400 text-2xl md:text-3xl" />
                 </div>
 
                 <div>
 
-                  <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)]">
+                  <h3 className="text-base md:text-xl font-bold text-[var(--foreground)]">
                     Frontend
                   </h3>
 
@@ -1469,21 +1953,21 @@ export default function Home() {
 
               </div>
 
-              <p className="text-sm md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
+              <p className="text-xs md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
                 Building responsive and interactive interfaces with React,
                 Next.js, Tailwind CSS and modern animation systems.
               </p>
 
-              <div className="flex gap-2 mt-5 flex-wrap">
+              <div className="flex gap-2 mt-4 md:mt-5 flex-wrap">
 
                 {["React", "Next.js", "Tailwind"].map((item) => (
                   <span
                     key={item}
                     className="
-                      px-3
+                      px-2.5
                       py-1
                       rounded-full
-                      text-[11px]
+                      text-[10px]
                       md:text-xs
                       border border-white/10
                       text-[var(--foreground)]/70
@@ -1515,7 +1999,7 @@ export default function Home() {
                 sm:translate-x-0
                 sm:bottom-10
                 w-full
-                max-w-[320px]
+                max-w-[280px]
                 sm:w-[240px]
                 md:w-[260px]
                 rounded-[24px]
@@ -1528,15 +2012,15 @@ export default function Home() {
               "
             >
 
-              <div className="flex items-center gap-4 mb-5">
+              <div className="flex items-center gap-4 mb-4 md:mb-5">
 
-                <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-green-500/10 flex items-center justify-center">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-green-500/10 flex items-center justify-center">
                   <FaNodeJs className="text-green-500 text-2xl md:text-3xl" />
                 </div>
 
                 <div>
 
-                  <h3 className="text-lg md:text-xl font-bold text-[var(--foreground)]">
+                  <h3 className="text-base md:text-xl font-bold text-[var(--foreground)]">
                     Backend
                   </h3>
 
@@ -1548,21 +2032,21 @@ export default function Home() {
 
               </div>
 
-              <p className="text-sm md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
+              <p className="text-xs md:text-[15px] leading-relaxed text-[var(--foreground)]/70">
                 Developing scalable REST APIs and backend systems with
                 Node.js, Express.js and PostgreSQL.
               </p>
 
-              <div className="flex gap-2 mt-5 flex-wrap">
+              <div className="flex gap-2 mt-4 md:mt-5 flex-wrap">
 
                 {["Node.js", "Express.js", "PostgreSQL"].map((item) => (
                   <span
                     key={item}
                     className="
-                      px-3
+                      px-2.5
                       py-1
                       rounded-full
-                      text-[11px]
+                      text-[10px]
                       md:text-xs
                       border border-white/10
                       text-[var(--foreground)]/70
@@ -1588,8 +2072,8 @@ export default function Home() {
               }}
               className="
                 absolute
-                w-[260px]
-                h-[260px]
+                w-[220px]
+                h-[220px]
                 sm:w-[420px]
                 sm:h-[420px]
                 md:w-[560px]
@@ -1602,7 +2086,7 @@ export default function Home() {
                 const radius =
                   expanded
                     ? window.innerWidth < 640
-                      ? 130
+                      ? 110
                       : window.innerWidth < 768
                         ? 175
                         : 245
@@ -1657,13 +2141,14 @@ export default function Home() {
                           y: -8,
                         }}
                         className="
-                          w-20
-                          h-20
+                          w-16
+                          h-16
                           sm:w-24
                           sm:h-24
                           md:w-28
                           md:h-28
-                          rounded-[22px]
+                          rounded-[18px]
+                          sm:rounded-[22px]
                           md:rounded-[30px]
                           border border-white/10
                           backdrop-blur-2xl
@@ -1671,14 +2156,14 @@ export default function Home() {
                           flex flex-col
                           items-center
                           justify-center
-                          gap-2
+                          gap-1
                           md:gap-3
                         "
                       >
 
                         {skill.icon}
 
-                        <span className="text-[9px] sm:text-xs md:text-sm text-[var(--foreground)] text-center px-1">
+                        <span className="text-[8px] sm:text-xs md:text-sm text-[var(--foreground)] text-center px-1">
                           {skill.name}
                         </span>
 
@@ -1700,8 +2185,8 @@ export default function Home() {
               className="
                 relative
                 z-30
-                w-28
-                h-28
+                w-24
+                h-24
                 sm:w-36
                 sm:h-36
                 md:w-44
@@ -1737,13 +2222,13 @@ export default function Home() {
                 "
               />
 
-              <div className="relative z-10 text-center">
+              <div className="relative z-10 text-center px-2">
 
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[var(--foreground)]">
+                <h3 className="text-xs sm:text-xl md:text-2xl font-bold text-[var(--foreground)]">
                   {expanded ? "Close" : "Click To Explore"}
                 </h3>
 
-                <p className="text-[10px] sm:text-xs md:text-sm text-[var(--foreground)]/70 mt-1">
+                <p className="text-[9px] sm:text-xs md:text-sm text-[var(--foreground)]/70 mt-0.5 sm:mt-1">
                   PERN Stack
                 </p>
 
@@ -1764,29 +2249,29 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="max-w-7xl mx-auto mt-40 px-6 relative overflow-hidden"
+          className="max-w-7xl mx-auto mt-28 md:mt-40 px-6 relative overflow-hidden"
         >
 
-          <div className="absolute -top-20 left-0 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full" />
+          <div className="absolute -top-20 left-0 w-72 h-72 bg-blue-500/10 blur-3xl rounded-full pointer-events-none" />
 
-          <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/10 blur-3xl rounded-full" />
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/10 blur-3xl rounded-full pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-24 relative z-10"
+            className="text-center mb-16 md:mb-24 relative z-10"
           >
 
-            <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+            <p className="uppercase tracking-[0.4em] text-blue-500 text-xs sm:text-sm mb-4">
               Journey
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
               Experience
             </h2>
 
-            <p className="mt-6 text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto">
+            <p className="mt-6 text-base sm:text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto">
               My journey building full-stack applications, scalable backend
               systems and immersive frontend experiences with the PERN
               ecosystem.
@@ -1862,7 +2347,7 @@ export default function Home() {
                 }}
                 className={`
                   relative
-                  mb-24
+                  mb-12 md:mb-24
                   flex
                   ${
                     item.side === "right"
@@ -1910,10 +2395,10 @@ export default function Home() {
                     relative
                     w-full
                     md:w-[44%]
-                    rounded-[34px]
+                    rounded-[28px] md:rounded-[34px]
                     border border-white/10
                     backdrop-blur-3xl
-                    p-8
+                    p-6 md:p-8
                     overflow-hidden
                     shadow-[0_20px_70px_rgba(0,0,0,0.25)]
                   "
@@ -1934,15 +2419,15 @@ export default function Home() {
                     "
                   />
 
-                  <div className="relative z-10 flex items-center justify-between mb-6">
+                  <div className="relative z-10 flex items-center justify-between mb-4 md:mb-6">
 
                     <div>
 
-                      <p className="text-sm uppercase tracking-[0.3em] text-blue-400 mb-2">
+                      <p className="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-400 mb-1 sm:mb-2">
                         Experience
                       </p>
 
-                      <h3 className="text-3xl font-black text-[var(--foreground)]">
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-[var(--foreground)]">
                         {item.title}
                       </h3>
 
@@ -1950,11 +2435,11 @@ export default function Home() {
 
                     <div
                       className="
-                        px-5
-                        py-2
+                        px-3 sm:px-5
+                        py-1.5 sm:py-2
                         rounded-2xl
                         border border-white/10
-                        text-sm
+                        text-xs sm:text-sm
                         text-[var(--foreground)]
                         backdrop-blur-xl
                       "
@@ -1964,11 +2449,11 @@ export default function Home() {
 
                   </div>
 
-                  <p className="relative z-10 text-[var(--foreground)]/70 leading-relaxed text-lg">
+                  <p className="relative z-10 text-[var(--foreground)]/70 leading-relaxed text-sm sm:text-base md:text-lg">
                     {item.desc}
                   </p>
 
-                  <div className="relative z-10 flex flex-wrap gap-3 mt-8">
+                  <div className="relative z-10 flex flex-wrap gap-2 sm:gap-3 mt-6 sm:mt-8">
 
                     {item.tech.map((tag) => (
                       <motion.div
@@ -1977,12 +2462,12 @@ export default function Home() {
                           scale: 1.08,
                         }}
                         className="
-                          px-4
-                          py-2
+                          px-3 sm:px-4
+                          py-1.5 sm:py-2
                           rounded-2xl
                           border border-white/10
                           backdrop-blur-xl
-                          text-sm
+                          text-xs sm:text-sm
                           text-[var(--foreground)]/80
                         "
                       >
@@ -2034,7 +2519,7 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="relative max-w-7xl mx-auto mt-40 px-6 overflow-hidden"
+          className="relative max-w-7xl mx-auto mt-28 md:mt-40 px-4 sm:px-6 overflow-hidden"
         >
 
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] blur-[140px] rounded-full pointer-events-none" />
@@ -2046,21 +2531,21 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-24 relative z-10"
+            className="text-center mb-16 md:mb-24 relative z-10"
           >
 
-            <p className="uppercase tracking-[0.4em] text-blue-500 text-sm mb-4">
+            <p className="uppercase tracking-[0.4em] text-blue-500 text-xs sm:text-sm mb-4">
               Contact
             </p>
 
-            <h2 className="text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-[var(--foreground)] leading-tight">
               Let’s Build
               <span className="block">
                 Something Amazing
               </span>
             </h2>
 
-            <p className="mt-6 text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-[var(--foreground)]/70 max-w-2xl mx-auto leading-relaxed">
               Have an idea, product or collaboration in mind?
               Let’s build a scalable full-stack experience together.
             </p>
@@ -2071,15 +2556,15 @@ export default function Home() {
             className="
               relative
               z-10
-              rounded-[40px]
+              rounded-[28px] sm:rounded-[40px]
               border border-white/10
               backdrop-blur-3xl
               bg-white/[0.04]
-              p-5 md:p-8
+              p-4 sm:p-8
             "
           >
 
-            <div className="grid lg:grid-cols-2 gap-10">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-10">
 
               {/* LEFT */}
               <motion.div
@@ -2094,12 +2579,12 @@ export default function Home() {
                 className="
                   relative
                   overflow-hidden
-                  rounded-[36px]
+                  rounded-[28px] sm:rounded-[36px]
                   border border-white/10
                   backdrop-blur-[40px]
                   bg-white/[0.06]
                   shadow-[0_15px_50px_rgba(0,0,0,0.2)]
-                  p-10
+                  p-6 sm:p-10
                 "
               >
 
@@ -2109,23 +2594,23 @@ export default function Home() {
 
                 <div className="relative z-10">
 
-                  <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-5">
+                  <p className="uppercase tracking-[0.3em] text-blue-400 text-xs sm:text-sm mb-4 sm:mb-5">
                     Why Work With Me
                   </p>
 
-                  <h3 className="text-4xl font-black text-[var(--foreground)] mb-6">
+                  <h3 className="text-2xl sm:text-4xl font-black text-[var(--foreground)] mb-4 sm:mb-6">
                     Full-Stack Architecture &
                     <br />
                     Premium Experiences
                   </h3>
 
-                  <p className="text-[var(--foreground)]/70 leading-relaxed text-lg">
+                  <p className="text-[var(--foreground)]/70 leading-relaxed text-base sm:text-lg">
                     I build complete web applications with PostgreSQL,
                     Express.js, React and Node.js while maintaining a strong
                     focus on polished UI, smooth interactions and performance.
                   </p>
 
-                  <div className="mt-10 space-y-5">
+                  <div className="mt-8 sm:mt-10 space-y-3 sm:space-y-5">
 
                     {[
                       "⚡ Fast & Scalable Applications",
@@ -2146,8 +2631,9 @@ export default function Home() {
                           border border-white/10
                           backdrop-blur-2xl
                           bg-white/[0.05]
-                          px-5
-                          py-4
+                          px-4 sm:px-5
+                          py-3 sm:py-4
+                          text-xs sm:text-base
                           text-[var(--foreground)]/80
                         "
                       >
@@ -2162,7 +2648,7 @@ export default function Home() {
               </motion.div>
 
               {/* RIGHT */}
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-6 sm:gap-8">
 
                 {/* EMAIL */}
                 <motion.div
@@ -2177,12 +2663,12 @@ export default function Home() {
                   className="
                     relative
                     overflow-hidden
-                    rounded-[36px]
+                    rounded-[28px] sm:rounded-[36px]
                     border border-white/10
                     backdrop-blur-[40px]
                     bg-white/[0.06]
                     shadow-[0_15px_50px_rgba(0,0,0,0.2)]
-                    p-8
+                    p-6 sm:p-8
                   "
                 >
 
@@ -2192,15 +2678,15 @@ export default function Home() {
 
                   <div className="relative z-10">
 
-                    <p className="uppercase tracking-[0.3em] text-blue-400 text-sm mb-3">
+                    <p className="uppercase tracking-[0.3em] text-blue-400 text-xs sm:text-sm mb-3">
                       Email
                     </p>
 
-                    <h3 className="text-3xl font-black text-[var(--foreground)] mb-4">
+                    <h3 className="text-2xl sm:text-3xl font-black text-[var(--foreground)] mb-3 sm:mb-4">
                       Start a Project
                     </h3>
 
-                    <p className="text-[var(--foreground)]/70 mb-8 leading-relaxed">
+                    <p className="text-[var(--foreground)]/70 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
                       Let’s discuss your idea and turn it into a scalable,
                       modern full-stack product.
                     </p>
@@ -2219,6 +2705,7 @@ export default function Home() {
                         py-4
                         font-semibold
                         text-white
+                        w-full sm:w-auto
                       "
                     >
 
@@ -2251,12 +2738,12 @@ export default function Home() {
                   className="
                     relative
                     overflow-hidden
-                    rounded-[36px]
+                    rounded-[28px] sm:rounded-[36px]
                     border border-white/10
                     backdrop-blur-[40px]
                     bg-white/[0.06]
                     shadow-[0_20px_70px_rgba(0,0,0,0.3)]
-                    p-8
+                    p-6 sm:p-8
                   "
                 >
 
@@ -2266,15 +2753,15 @@ export default function Home() {
 
                   <div className="relative z-10">
 
-                    <p className="uppercase tracking-[0.3em] text-purple-400 text-sm mb-3">
+                    <p className="uppercase tracking-[0.3em] text-purple-400 text-xs sm:text-sm mb-3">
                       Social
                     </p>
 
-                    <h3 className="text-3xl font-black text-[var(--foreground)] mb-4">
+                    <h3 className="text-2xl sm:text-3xl font-black text-[var(--foreground)] mb-3 sm:mb-4">
                       Let’s Connect
                     </h3>
 
-                    <p className="text-[var(--foreground)]/70 mb-8 leading-relaxed">
+                    <p className="text-[var(--foreground)]/70 mb-6 sm:mb-8 text-sm sm:text-base leading-relaxed">
                       Follow my journey, full-stack experiments, UI
                       explorations and modern web creations.
                     </p>
@@ -2296,6 +2783,7 @@ export default function Home() {
                         font-semibold
                         border border-white/10
                         text-[var(--foreground)]
+                        w-full sm:w-auto
                       "
                     >
 
@@ -2324,13 +2812,13 @@ export default function Home() {
             INFINITE STACK MARQUEE
         ======================================================== */}
 
-        <div className="max-w-7xl mx-auto w-full overflow-hidden mt-24 py-24 relative z-10">
+        <div className="max-w-7xl mx-auto w-full overflow-hidden mt-16 md:mt-24 py-12 md:py-24 relative z-10">
 
           {/* LEFT FADE */}
-          <div className="absolute top-0 left-0 w-40 h-full bg-gradient-to-r from-[var(--background)] to-transparent z-20 pointer-events-none" />
+          <div className="absolute top-0 left-0 w-20 md:w-40 h-full bg-gradient-to-r from-[var(--background)] to-transparent z-20 pointer-events-none" />
 
           {/* RIGHT FADE */}
-          <div className="absolute top-0 right-0 w-40 h-full bg-gradient-to-l from-[var(--background)] to-transparent z-20 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-20 md:w-40 h-full bg-gradient-to-l from-[var(--background)] to-transparent z-20 pointer-events-none" />
 
           {/* BACKGROUND GLOW */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -2341,7 +2829,7 @@ export default function Home() {
 
           {/* MARQUEE */}
           <motion.div
-            className="flex w-max gap-16 md:gap-24"
+            className="flex w-max gap-8 sm:gap-16 md:gap-24"
             animate={{
               x: ["0%", "-50%"],
             }}
@@ -2440,9 +2928,8 @@ export default function Home() {
                   flex-col
                   items-center
                   justify-center
-                  w-36
-                  h-36
-                  rounded-[32px]
+                  w-28 h-28 sm:w-36 sm:h-36
+                  rounded-[24px] sm:rounded-[32px]
                   border border-white/10
                   backdrop-blur-3xl
                   bg-white/[0.03]
@@ -2497,7 +2984,7 @@ export default function Home() {
                   transition={{
                     duration: 0.5,
                   }}
-                  className="relative z-10 text-6xl"
+                  className="relative z-10 text-4xl sm:text-6xl"
                 >
                   {skill.icon}
                 </motion.div>
@@ -2507,8 +2994,8 @@ export default function Home() {
                   className="
                     relative
                     z-10
-                    mt-4
-                    text-sm
+                    mt-2 sm:mt-4
+                    text-xs sm:text-sm
                     tracking-wide
                     text-[var(--foreground)]/70
                     group-hover:text-[var(--foreground)]
@@ -2524,7 +3011,7 @@ export default function Home() {
                   className="
                     absolute
                     inset-0
-                    rounded-[32px]
+                    rounded-[24px] sm:rounded-[32px]
                     opacity-0
                     group-hover:opacity-100
                     transition-opacity
@@ -2545,4 +3032,3 @@ export default function Home() {
     </ClientWrapper>
   );
 }
-
